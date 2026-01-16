@@ -2,310 +2,315 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LaunchOS | The Founder's Operating System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LaunchOS Enterprise | Founder's Suite</title>
     
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&family=Playfair+Display:wght@600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- SYSTEM THEME --- */
+        /* --- THEME SYSTEM --- */
         :root {
-            --bg-app: #09090b;       /* Zinc 950 */
-            --bg-panel: #18181b;     /* Zinc 900 */
-            --bg-surface: #27272a;   /* Zinc 800 */
-            --border: #3f3f46;       /* Zinc 700 */
-            --primary: #3b82f6;      /* Blue 500 */
-            --primary-glow: rgba(59, 130, 246, 0.3);
-            --text-main: #f4f4f5;
+            --bg-body: #09090b;
+            --bg-panel: #18181b;
+            --bg-surface: #27272a;
+            --border: #3f3f46;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --text-main: #fafafa;
             --text-muted: #a1a1aa;
-            --accent-purple: #8b5cf6;
-            --accent-teal: #14b8a6;
-            --radius-sm: 6px;
-            --radius-md: 12px;
-            --radius-lg: 20px;
-            --shadow-float: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+            --danger: #ef4444;
+            --success: #10b981;
+            --radius-md: 8px;
+            --radius-lg: 16px;
             --font-ui: 'Inter', sans-serif;
-            --font-display: 'Outfit', sans-serif;
+            --sidebar-w: 260px;
         }
 
         /* --- GLOBAL RESET --- */
-        * { box-sizing: border-box; outline: none; -webkit-font-smoothing: antialiased; }
-        body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; }
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; background: var(--bg-body); color: var(--text-main); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; flex-direction: row; }
         
-        /* --- SIDEBAR --- */
-        aside { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 50; }
-        .brand-area { padding: 24px; font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; letter-spacing: -0.5px; }
-        .brand-area i { color: var(--primary); }
+        /* --- LAYOUT & RESPONSIVENESS --- */
+        aside { 
+            width: var(--sidebar-w); background: var(--bg-panel); border-right: 1px solid var(--border); 
+            display: flex; flex-direction: column; z-index: 50; flex-shrink: 0; transition: transform 0.3s;
+        }
+        main { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; background: var(--bg-body); }
         
-        .nav-list { flex: 1; padding: 0 12px; display: flex; flex-direction: column; gap: 4px; }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            aside { 
+                width: 100%; height: auto; border-right: none; border-top: 1px solid var(--border); 
+                order: 2; flex-direction: row; padding: 10px; overflow-x: auto; justify-content: space-around;
+            }
+            main { order: 1; height: calc(100vh - 70px); }
+            .brand-area { display: none !important; }
+            .nav-item span { display: none; }
+            .nav-item { padding: 10px; justify-content: center; }
+            .nav-item i { font-size: 1.5rem; margin: 0; }
+        }
+
+        /* --- SIDEBAR COMPONENTS --- */
+        .brand-area { padding: 20px; font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 800; color: white; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--border); }
+        .nav-list { flex: 1; padding: 10px; overflow-y: auto; }
         .nav-item {
-            display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm);
-            color: var(--text-muted); cursor: pointer; transition: 0.2s; font-weight: 500; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-md);
+            color: var(--text-muted); cursor: pointer; transition: 0.2s; font-weight: 500; font-size: 0.9rem; margin-bottom: 4px;
         }
         .nav-item:hover { background: var(--bg-surface); color: white; }
-        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 0 15px var(--primary-glow); }
-        .nav-item.locked { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
-        
-        /* --- MAIN AREA --- */
-        main { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-        .view-container { flex: 1; overflow-y: auto; padding: 40px; display: none; opacity: 0; transition: opacity 0.3s ease; }
-        .view-container.active { display: block; opacity: 1; }
+        .nav-item.active { background: var(--primary); color: white; }
+        .nav-item i { font-size: 1.2rem; }
 
-        /* --- UI COMPONENTS --- */
-        h1 { font-family: var(--font-display); font-size: 2.5rem; margin: 0 0 10px 0; letter-spacing: -1px; }
-        p.desc { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin-bottom: 40px; line-height: 1.6; }
-        
-        .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px; position: relative; overflow: hidden; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        /* --- VIEW CONTAINER --- */
+        .view-section { display: none; padding: 30px; overflow-y: auto; height: 100%; max-width: 1400px; margin: 0 auto; width: 100%; animation: fadeIn 0.3s ease; }
+        .view-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+        /* --- UI ELEMENTS --- */
+        h1 { font-family: 'Outfit', sans-serif; font-size: 2rem; margin: 0 0 10px 0; }
+        p.sub { color: var(--text-muted); margin-bottom: 30px; max-width: 600px; line-height: 1.5; }
+        
+        .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 20px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        
         input, select, textarea {
-            width: 100%; background: var(--bg-app); border: 1px solid var(--border); color: white; padding: 12px;
-            border-radius: var(--radius-sm); font-size: 1rem; transition: 0.2s; font-family: var(--font-ui);
+            width: 100%; background: var(--bg-surface); border: 1px solid var(--border); color: white;
+            padding: 12px; border-radius: var(--radius-md); font-size: 1rem; margin-top: 8px; font-family: var(--font-ui);
         }
-        input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-glow); }
-
+        label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+        
         .btn {
-            background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-sm);
-            font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 1rem;
-            transition: transform 0.1s;
+            background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-md);
+            font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem;
         }
-        .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-        .btn-large { width: 100%; justify-content: center; padding: 16px; font-size: 1.1rem; }
-        
-        /* --- MODULE: NAME GENERATOR --- */
+        .btn:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); }
+        .btn-outline:hover { border-color: var(--text-muted); background: var(--bg-surface); }
+
+        /* --- 1. NAMING MODULE --- */
         .name-card {
-            background: var(--bg-surface); border: 1px solid var(--border); padding: 20px; border-radius: var(--radius-md);
-            cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center;
+            background: var(--bg-surface); border: 1px solid var(--border); padding: 15px; border-radius: var(--radius-md);
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s;
         }
-        .name-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-float); }
-        .name-card.selected { background: rgba(59, 130, 246, 0.1); border-color: var(--primary); }
-        .name-text { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: white; }
-        .avail-badge { font-size: 0.75rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 4px 8px; border-radius: 20px; font-weight: 600; text-transform: uppercase; }
+        .name-card:hover { border-color: var(--primary); }
+        .name-card.selected { background: rgba(99, 102, 241, 0.2); border-color: var(--primary); }
+        .name-main { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 1.2rem; }
+        .domain-tag { font-size: 0.75rem; background: #064e3b; color: #34d399; padding: 4px 8px; border-radius: 99px; }
 
-        /* --- MODULE: STRATEGY (RADAR) --- */
-        .radar-container { width: 300px; height: 300px; margin: 0 auto; position: relative; }
-        .slider-group { margin-bottom: 15px; }
-        .slider-group input { width: 100%; margin-top: 5px; cursor: pointer; }
+        /* --- 2. STRATEGY MODULE --- */
+        .swot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .swot-box { padding: 20px; border-radius: var(--radius-md); border-left: 4px solid; background: var(--bg-surface); }
+        .swot-box h3 { margin: 0 0 10px 0; font-size: 1rem; opacity: 0.9; }
+        .swot-list { padding-left: 20px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
 
-        /* --- MODULE: WEBSITE BUILDER (FRAMER STYLE) --- */
-        .builder-layout { display: flex; height: 100%; width: 100%; background: #111; }
+        /* --- 3. BUILDER MODULE (Complex) --- */
+        .builder-layout { display: flex; height: 100%; border-top: 1px solid var(--border); }
         
-        /* Left: Layers/Add */
         .b-sidebar { width: 280px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-        .b-header { padding: 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: white; display: flex; justify-content: space-between; }
-        .b-tools { padding: 16px; overflow-y: auto; flex: 1; }
-        
-        .block-btn {
-            display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px; background: var(--bg-surface);
-            border: 1px solid var(--border); color: var(--text-muted); border-radius: var(--radius-sm); margin-bottom: 8px;
-            cursor: pointer; transition: 0.2s; font-size: 0.9rem;
-        }
-        .block-btn:hover { color: white; border-color: var(--text-muted); background: var(--bg-surface); }
-        .block-btn i { font-size: 1.1rem; }
+        .b-header { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 600; font-size: 0.9rem; display: flex; justify-content: space-between; }
+        .b-content { padding: 15px; overflow-y: auto; flex: 1; }
 
-        /* Center: Canvas */
-        .b-canvas-area { flex: 1; background: #09090b; display: flex; flex-direction: column; position: relative; overflow: hidden; }
-        
-        .b-toolbar {
-            height: 50px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; 
-            align-items: center; justify-content: center; gap: 20px; padding: 0 20px;
+        .block-item { 
+            padding: 10px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 6px; 
+            margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
         }
-        .device-toggle {
-            background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;
-            padding: 8px; border-radius: 6px; transition: 0.2s;
-        }
-        .device-toggle:hover { color: white; background: var(--bg-surface); }
-        .device-toggle.active { color: var(--primary); background: rgba(59, 130, 246, 0.1); }
-        
-        .b-viewport { flex: 1; overflow-y: auto; display: flex; justify-content: center; padding: 40px; background-image: radial-gradient(#333 1px, transparent 1px); background-size: 20px 20px; }
-        
-        /* THE DEVICE FRAME */
-        .device-frame {
-            background: white; transition: width 0.3s ease; box-shadow: var(--shadow-float);
-            display: flex; flex-direction: column; overflow: hidden; position: relative;
-        }
-        .device-frame.desktop { width: 1024px; min-height: 800px; border-radius: 4px; }
-        .device-frame.mobile { width: 375px; min-height: 667px; border-radius: 30px; border: 8px solid #27272a; }
+        .block-item:hover { border-color: var(--primary); color: white; }
 
-        /* Sections inside Canvas */
-        .w-section { position: relative; transition: all 0.2s; border: 2px solid transparent; }
-        .w-section:hover { border-color: var(--primary); }
-        .w-section.selected { border-color: var(--accent-purple); }
+        .b-canvas-area { flex: 1; background: #09090b; display: flex; flex-direction: column; overflow: hidden; }
+        .b-toolbar { height: 50px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: center; gap: 15px; padding: 0 20px; }
         
-        /* Edit Actions Hover */
-        .w-actions { 
+        .device-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem; padding: 8px; border-radius: 6px; }
+        .device-btn.active { color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+
+        .b-viewport { flex: 1; overflow-y: auto; padding: 40px 20px; display: flex; justify-content: center; background-image: radial-gradient(#333 1px, transparent 1px); background-size: 20px 20px; }
+        
+        /* The Canvas Frame */
+        .canvas-frame {
+            background: white; color: #111; transition: width 0.3s; box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            min-height: 800px; position: relative; overflow: hidden;
+        }
+        .canvas-frame.desktop { width: 100%; max-width: 1200px; border-radius: 4px; }
+        .canvas-frame.mobile { width: 375px; border-radius: 30px; border: 8px solid #333; }
+
+        /* Editable Blocks */
+        .web-block { position: relative; border: 2px solid transparent; transition: 0.2s; }
+        .web-block:hover { border-color: var(--primary); }
+        .block-actions { 
             position: absolute; top: 0; right: 0; background: var(--primary); color: white; 
-            padding: 4px 8px; font-size: 12px; display: none; border-bottom-left-radius: 6px; z-index: 10;
+            display: none; border-radius: 0 0 0 6px; z-index: 10;
         }
-        .w-section:hover .w-actions { display: flex; gap: 8px; }
+        .block-actions button { background: none; border: none; color: white; padding: 5px 8px; cursor: pointer; }
+        .block-actions button:hover { background: rgba(0,0,0,0.1); }
+        .web-block:hover .block-actions { display: flex; }
 
-        /* Right: Inspector */
-        .b-inspector { width: 260px; background: var(--bg-panel); border-left: 1px solid var(--border); padding: 20px; display: none; }
-        .b-inspector.active { display: block; }
+        /* Content Editable Styles */
+        [contenteditable]:focus { outline: 2px solid var(--primary); border-radius: 2px; }
+        [contenteditable]:empty:before { content: attr(placeholder); color: #999; display: block; }
+        
+        /* Image Upload */
+        .img-placeholder { cursor: pointer; transition: 0.2s; display: block; }
+        .img-placeholder:hover { opacity: 0.8; outline: 2px dashed var(--primary); }
+        
+        /* Hidden File Input */
+        #hidden-file-input { display: none; }
+
+        @media (max-width: 768px) {
+            .builder-layout { flex-direction: column; }
+            .b-sidebar { width: 100%; height: 200px; order: 2; }
+            .b-canvas-area { height: 500px; order: 1; }
+            .b-viewport { padding: 10px; }
+        }
     </style>
 </head>
 <body>
 
+    <input type="file" id="hidden-file-input" accept="image/*">
+
     <aside>
-        <div class="brand-area"><i class="ph-fill ph-rocket-launch"></i> LaunchOS</div>
-        <div class="nav-list">
-            <div class="nav-item active" id="nav-profile" onclick="App.router('profile')">
-                <i class="ph ph-user-circle"></i> 1. Profile
-            </div>
-            <div class="nav-item locked" id="nav-names" onclick="App.router('names')">
-                <i class="ph ph-magic-wand"></i> 2. Identity
-            </div>
-            <div class="nav-item locked" id="nav-pmf" onclick="App.router('pmf')">
-                <i class="ph ph-chart-polar"></i> 3. Strategy (PMF)
-            </div>
-            <div class="nav-item locked" id="nav-builder" onclick="App.router('builder')">
-                <i class="ph ph-desktop"></i> 4. Website Builder
-            </div>
+        <div class="brand-area">
+            <i class="ph-fill ph-planet"></i> LaunchOS
         </div>
-        <div style="margin-top: auto; padding: 20px;">
-            <button class="btn" style="width: 100%; font-size: 0.85rem;" onclick="App.saveProject()">
-                <i class="ph ph-floppy-disk"></i> Save Project
-            </button>
+        <div class="nav-list">
+            <div class="nav-item active" onclick="App.route('profile')"><i class="ph ph-user-circle"></i> Profile</div>
+            <div class="nav-item" onclick="App.route('branding')"><i class="ph ph-sparkle"></i> Branding</div>
+            <div class="nav-item" onclick="App.route('strategy')"><i class="ph ph-chart-line-up"></i> Strategy</div>
+            <div class="nav-item" onclick="App.route('builder')"><i class="ph ph-desktop"></i> Builder</div>
         </div>
     </aside>
 
     <main>
         
-        <div id="view-profile" class="view-container active">
-            <h1>Start Your Empire.</h1>
-            <p class="desc">Tell us about your vision. Our AI algorithms use this DNA to generate your brand, validate your strategy, and build your site.</p>
+        <div id="view-profile" class="view-section active">
+            <h1>Project Profile</h1>
+            <p class="sub">Initialize your business DNA. This data powers the AI generators.</p>
             
             <div class="card" style="max-width: 800px;">
                 <div class="grid-2">
                     <div>
-                        <label>Industry</label>
+                        <label>Business Sector</label>
                         <select id="inp-industry">
-                            <option value="tech">Technology / SaaS</option>
-                            <option value="food">Food & Beverage</option>
-                            <option value="fashion">Fashion & Lifestyle</option>
-                            <option value="health">Health & Wellness</option>
+                            <option value="tech">Technology / SaaS / App</option>
+                            <option value="food">Food & Beverage / Restaurant</option>
+                            <option value="fashion">Fashion / Retail / E-commerce</option>
+                            <option value="service">Agency / Consulting / Freelance</option>
                         </select>
                     </div>
                     <div>
-                        <label>Seed Keyword</label>
-                        <input type="text" id="inp-keyword" placeholder="e.g. Code, Brownie, Yoga">
+                        <label>Primary Keyword</label>
+                        <input type="text" id="inp-keyword" placeholder="e.g. Brownie, CRM, Sneaker">
                     </div>
                 </div>
                 <br>
-                <div class="grid-2">
-                     <div>
-                        <label>Business Description</label>
-                        <textarea id="inp-desc" rows="4" placeholder="e.g. We sell organic kelveragu brownies that taste modern but are healthy..."></textarea>
-                    </div>
-                     <div>
-                        <label>Target Audience</label>
-                        <textarea id="inp-audience" rows="4" placeholder="e.g. Gen Z, Fitness Enthusiasts, Busy Moms..."></textarea>
-                    </div>
-                </div>
+                <label>Business Description</label>
+                <textarea id="inp-desc" rows="3" placeholder="Describe your product and unique value..."></textarea>
                 <br>
-                <button class="btn btn-large" onclick="App.completeProfile()">Initialize Project <i class="ph ph-arrow-right"></i></button>
+                <button class="btn" onclick="App.saveProfile()">Save & Continue <i class="ph ph-arrow-right"></i></button>
             </div>
         </div>
 
-        <div id="view-names" class="view-container">
-            <h1>Brand Identity.</h1>
-            <p class="desc">Linguistic algorithms generate available, high-impact brand names based on your industry topology.</p>
+        <div id="view-branding" class="view-section">
+            <h1>Identity Studio</h1>
+            <p class="sub">Generate industry-standard, phonetically balanced brand names.</p>
             
             <div class="card">
-                <div class="grid-2">
-                    <button class="btn" onclick="Modules.Naming.generate()">Generate New Set</button>
-                    <div style="text-align: right; color: var(--text-muted); align-self: center;">
-                        Selected: <strong style="color:white" id="display-brand">None</strong>
+                <div class="grid-2" style="align-items: end;">
+                    <div>
+                        <label>Name Style</label>
+                        <select id="inp-namestyle">
+                            <option value="modern">Modern & Abstract (e.g., Vercel)</option>
+                            <option value="compound">Compound (e.g., FaceBook)</option>
+                            <option value="classic">Classic & Rooted (e.g., Solura)</option>
+                        </select>
                     </div>
+                    <button class="btn btn-outline" onclick="Modules.Branding.generate()">Generate Names</button>
                 </div>
-                <div class="grid-3" id="name-grid" style="margin-top: 30px;">
-                    </div>
+                <div id="name-grid" class="grid-2" style="margin-top: 20px;"></div>
             </div>
-            <div style="text-align: right;">
-                <button class="btn" onclick="App.unlock('pmf')">Next: Strategy <i class="ph ph-arrow-right"></i></button>
+            
+            <div class="card" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>Active Brand: <span id="active-brand-display" style="font-size: 1.2rem;">Pending...</span></strong>
+                    <button class="btn" onclick="App.route('strategy')">Confirm & Next</button>
+                </div>
             </div>
         </div>
 
-        <div id="view-pmf" class="view-container">
-            <h1>Market Fit Analysis.</h1>
-            <p class="desc">Visualize how your business stacks up against the competition using our proprietary scoring engine.</p>
+        <div id="view-strategy" class="view-section">
+            <h1>Strategic Intelligence</h1>
+            <p class="sub">Deep analysis generated based on your profile.</p>
+            
+            <div class="card">
+                <button class="btn" onclick="Modules.Strategy.run()">Run Analysis Engine</button>
+                <div id="strategy-output" style="display: none; margin-top: 20px;">
+                    
+                    <h3>SWOT Analysis</h3>
+                    <div class="swot-grid">
+                        <div class="swot-box" style="border-color: #10b981;">
+                            <h3 style="color:#10b981">Strengths</h3>
+                            <div id="swot-s" class="swot-list"></div>
+                        </div>
+                        <div class="swot-box" style="border-color: #f59e0b;">
+                            <h3 style="color:#f59e0b">Weaknesses</h3>
+                            <div id="swot-w" class="swot-list"></div>
+                        </div>
+                        <div class="swot-box" style="border-color: #3b82f6;">
+                            <h3 style="color:#3b82f6">Opportunities</h3>
+                            <div id="swot-o" class="swot-list"></div>
+                        </div>
+                        <div class="swot-box" style="border-color: #ef4444;">
+                            <h3 style="color:#ef4444">Threats</h3>
+                            <div id="swot-t" class="swot-list"></div>
+                        </div>
+                    </div>
 
-            <div class="grid-2">
-                <div class="card">
-                    <h3>Your Metrics</h3>
-                    <div class="slider-group">
-                        <label>Price Competitiveness (Low Cost = High Score)</label>
-                        <input type="range" min="1" max="10" value="7" id="pmf-price" oninput="Modules.PMF.update()">
+                    <div style="margin-top: 30px;">
+                        <h3>Marketing Ideas</h3>
+                        <div class="card" id="marketing-ideas" style="background: var(--bg-surface);"></div>
                     </div>
-                    <div class="slider-group">
-                        <label>Product Uniqueness (Quality/Features)</label>
-                        <input type="range" min="1" max="10" value="8" id="pmf-quality" oninput="Modules.PMF.update()">
-                    </div>
-                    <div class="slider-group">
-                        <label>Brand & Storytelling</label>
-                        <input type="range" min="1" max="10" value="6" id="pmf-brand" oninput="Modules.PMF.update()">
-                    </div>
-                    <div class="slider-group">
-                        <label>Ease of Access (Distribution)</label>
-                        <input type="range" min="1" max="10" value="5" id="pmf-access" oninput="Modules.PMF.update()">
-                    </div>
-                </div>
 
-                <div class="card" style="display:flex; justify-content:center; align-items:center; flex-direction:column;">
-                    <div id="radar-chart" class="radar-container"></div>
-                    <div style="margin-top:20px; text-align:center;">
-                        <h2 id="pmf-score" style="color:var(--accent-teal)">Score: 82/100</h2>
-                        <span style="color:var(--text-muted)">Strong Market Fit</span>
-                    </div>
                 </div>
-            </div>
-            <div style="text-align: right;">
-                <button class="btn" onclick="App.unlock('builder')">Next: Build Website <i class="ph ph-arrow-right"></i></button>
             </div>
         </div>
 
-        <div id="view-builder" class="view-container" style="padding: 0; height: 100%;">
+        <div id="view-builder" class="view-section" style="padding: 0; max-width: 100%;">
             <div class="builder-layout">
                 
                 <div class="b-sidebar">
-                    <div class="b-header">
-                        <span>Components</span>
+                    <div class="b-header">Add Blocks</div>
+                    <div class="b-content">
+                        <div class="block-item" onclick="Modules.Builder.add('hero')"><i class="ph ph-image"></i> Hero Section</div>
+                        <div class="block-item" onclick="Modules.Builder.add('features')"><i class="ph ph-squares-four"></i> Features Grid</div>
+                        <div class="block-item" onclick="Modules.Builder.add('gallery')"><i class="ph ph-images"></i> Image Gallery</div>
+                        <div class="block-item" onclick="Modules.Builder.add('text')"><i class="ph ph-text-t"></i> Rich Text</div>
+                        <div class="block-item" onclick="Modules.Builder.add('cta')"><i class="ph ph-megaphone"></i> Call to Action</div>
+                        <div class="block-item" onclick="Modules.Builder.add('footer')"><i class="ph ph-layout"></i> Footer</div>
                     </div>
-                    <div class="b-tools">
-                        <button class="block-btn" onclick="Modules.Builder.add('hero')"><i class="ph ph-image-square"></i> Hero Section</button>
-                        <button class="block-btn" onclick="Modules.Builder.add('features')"><i class="ph ph-squares-four"></i> Feature Grid</button>
-                        <button class="block-btn" onclick="Modules.Builder.add('content')"><i class="ph ph-article"></i> Rich Content</button>
-                        <button class="block-btn" onclick="Modules.Builder.add('gallery')"><i class="ph ph-images"></i> Gallery</button>
-                        <button class="block-btn" onclick="Modules.Builder.add('contact')"><i class="ph ph-envelope"></i> Contact Us</button>
-                        
-                        <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 10px;">
-                            <label>Page Structure</label>
-                            <div id="layer-list" style="display: flex; flex-direction: column; gap: 5px;"></div>
-                        </div>
+                    
+                    <div class="b-header" style="border-top:1px solid var(--border)">Theme Settings</div>
+                    <div class="b-content">
+                        <label>Primary Color</label>
+                        <input type="color" id="theme-color" value="#6366f1" oninput="Modules.Builder.updateTheme()">
+                        <br><br>
+                        <label>Font Family</label>
+                        <select id="theme-font" onchange="Modules.Builder.updateTheme()">
+                            <option value="Inter, sans-serif">Inter (Clean)</option>
+                            <option value="'Playfair Display', serif">Playfair (Luxury)</option>
+                            <option value="'Space Grotesk', sans-serif">Space (Tech)</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="b-canvas-area">
                     <div class="b-toolbar">
-                        <button class="device-toggle active" id="btn-desktop" onclick="Modules.Builder.setDevice('desktop')"><i class="ph ph-desktop"></i></button>
-                        <button class="device-toggle" id="btn-mobile" onclick="Modules.Builder.setDevice('mobile')"><i class="ph ph-device-mobile"></i></button>
-                        <div style="width: 1px; height: 20px; background: var(--border); margin: 0 10px;"></div>
-                        <button class="btn btn-sm" onclick="Modules.Builder.exportHTML()">Export <i class="ph ph-export"></i></button>
+                        <button class="device-btn active" onclick="Modules.Builder.setMode('desktop')"><i class="ph ph-desktop"></i></button>
+                        <button class="device-btn" onclick="Modules.Builder.setMode('mobile')"><i class="ph ph-device-mobile"></i></button>
+                        <div style="width: 20px;"></div>
+                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;" onclick="Modules.Builder.exportSite()"><i class="ph ph-export"></i> Export HTML</button>
                     </div>
-                    
                     <div class="b-viewport">
-                        <div id="device-frame" class="device-frame desktop">
+                        <div id="canvas" class="canvas-frame desktop">
                             </div>
-                    </div>
-                </div>
-
-                <div class="b-inspector" id="inspector">
-                    <div class="b-header" style="padding-left:0;">Properties</div>
-                    <div id="inspector-content" style="margin-top: 20px;">
-                        <p style="color:var(--text-muted); font-size:0.9rem;">Select a block to edit properties.</p>
                     </div>
                 </div>
 
@@ -315,111 +320,99 @@
     </main>
 
     <script>
-        /* --- STATE MANAGEMENT --- */
-        const State = {
-            profile: { industry: 'tech', keyword: '', desc: '', audience: '' },
-            brand: 'BrandZero',
-            pmf: { price: 7, quality: 8, brand: 6, access: 5 },
-            website: [
-                { id: 'b1', type: 'hero', bg: '#ffffff', color: '#111111', content: { h1: 'Your Vision, Realized.', p: 'Click here to edit this text. Build your future.' } }
-            ]
-        };
-
-        /* --- APP CONTROLLER --- */
+        /* --- CORE STATE --- */
         const App = {
+            data: {
+                industry: 'tech',
+                keyword: '',
+                desc: '',
+                brandName: 'LaunchBrand',
+                blocks: []
+            },
+            
             init: () => {
-                // Check Load
-                if(localStorage.getItem('launchOS_data')) {
-                    const saved = JSON.parse(localStorage.getItem('launchOS_data'));
-                    Object.assign(State, saved);
-                    ['names', 'pmf', 'builder'].forEach(id => document.getElementById('nav-'+id).classList.remove('locked'));
-                    document.getElementById('display-brand').innerText = State.brand;
-                }
-                Modules.Builder.render(); // Init builder
+                const saved = localStorage.getItem('launchOS_v7');
+                if(saved) App.data = JSON.parse(saved);
+                
+                // Hydrate inputs
+                document.getElementById('inp-industry').value = App.data.industry;
+                document.getElementById('inp-keyword').value = App.data.keyword;
+                document.getElementById('inp-desc').value = App.data.desc;
+                document.getElementById('active-brand-display').innerText = App.data.brandName;
+                
+                // Init modules
+                Modules.Builder.init();
             },
 
-            router: (page) => {
-                if(document.getElementById('nav-'+page).classList.contains('locked')) return;
+            saveProfile: () => {
+                App.data.industry = document.getElementById('inp-industry').value;
+                App.data.keyword = document.getElementById('inp-keyword').value;
+                App.data.desc = document.getElementById('inp-desc').value;
+                App.persist();
+                App.route('branding');
+            },
+
+            persist: () => {
+                localStorage.setItem('launchOS_v7', JSON.stringify(App.data));
+            },
+
+            route: (id) => {
+                document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+                document.getElementById('view-'+id).classList.add('active');
                 
-                // Sidebar Active
                 document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-                document.getElementById('nav-'+page).classList.add('active');
-
-                // View Switch
-                document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
-                document.getElementById('view-'+page).classList.add('active');
-
-                // Specific Init
-                if(page === 'names') Modules.Naming.generate();
-                if(page === 'pmf') Modules.PMF.update();
-                if(page === 'builder') Modules.Builder.render();
-            },
-
-            completeProfile: () => {
-                State.profile.industry = document.getElementById('inp-industry').value;
-                State.profile.keyword = document.getElementById('inp-keyword').value;
-                State.profile.desc = document.getElementById('inp-desc').value;
-                State.profile.audience = document.getElementById('inp-audience').value;
-                
-                App.unlock('names');
-            },
-
-            unlock: (page) => {
-                document.getElementById('nav-'+page).classList.remove('locked');
-                App.router(page);
-                App.saveProject();
-            },
-
-            saveProject: () => {
-                localStorage.setItem('launchOS_data', JSON.stringify(State));
-                // Toast Simulation
-                const btn = document.querySelector('.nav-list + div button');
-                const original = btn.innerHTML;
-                btn.innerHTML = `<i class="ph ph-check"></i> Saved!`;
-                setTimeout(() => btn.innerHTML = original, 2000);
+                // Just highlight current (simplified)
             }
         };
 
         /* --- MODULES --- */
         const Modules = {
             
-            // 1. ADVANCED NAMING ENGINE
-            Naming: {
+            // 1. ADVANCED NAMING GENERATOR
+            Branding: {
                 generate: () => {
-                    const seed = State.profile.keyword.replace(/[^a-zA-Z]/g, '') || "Core";
-                    const ind = State.profile.industry;
-                    
-                    // Morphemes
-                    const prefixes = ind === 'food' ? ['Nu', 'Vita', 'Pure', 'Coco', 'Zest'] : ['Sys', 'Net', 'Nov', 'Vel', 'Aer'];
-                    const suffixes = ind === 'food' ? ['eats', 'ly', 'bowl', 'root', 'kitchen'] : ['ify', 'os', 'ix', 'ex', 'flow'];
-                    const techRoots = ['Luma', 'Kinet', 'Virt', 'Synt', 'Quant'];
-                    
-                    let results = [];
-                    
-                    // Algorithm 1: Blends
-                    for(let i=0; i<3; i++) results.push(prefixes[Math.floor(Math.random()*prefixes.length)] + seed);
-                    // Algorithm 2: Tech/Abstract
-                    for(let i=0; i<3; i++) results.push(techRoots[Math.floor(Math.random()*techRoots.length)] + suffixes[Math.floor(Math.random()*suffixes.length)]);
-                    // Algorithm 3: Suffix
-                    for(let i=0; i<3; i++) results.push(seed + suffixes[Math.floor(Math.random()*suffixes.length)]);
-
-                    // Render
+                    const seed = App.data.keyword.replace(/[^a-zA-Z]/g, '') || "Nova";
+                    const ind = App.data.industry;
+                    const style = document.getElementById('inp-namestyle').value;
                     const grid = document.getElementById('name-grid');
                     grid.innerHTML = '';
-                    results.forEach(name => {
+                    
+                    // Phonetic Components
+                    const prefixes = ['Vel', 'Nov', 'Syn', 'Aero', 'Lumi', 'Omni', 'Zen', 'Arc'];
+                    const suffixes = ['os', 'ix', 'ex', 'ify', 'ly', 'gen', 'flow', 'base'];
+                    const foodRoots = ['Taste', 'Bite', 'Pure', 'Zest', 'Root', 'Leaf', 'Coco'];
+                    
+                    let names = [];
+
+                    for(let i=0; i<6; i++) {
+                        let n = "";
+                        if(style === 'modern') {
+                            n = prefixes[Math.floor(Math.random()*prefixes.length)] + suffixes[Math.floor(Math.random()*suffixes.length)];
+                        } else if(style === 'compound') {
+                            n = seed + suffixes[Math.floor(Math.random()*suffixes.length)];
+                        } else {
+                            // Classic
+                            n = (ind==='food'? foodRoots[Math.floor(Math.random()*foodRoots.length)] : prefixes[Math.floor(Math.random()*prefixes.length)]) + "ura";
+                        }
+                        // Capitalize
+                        n = n.charAt(0).toUpperCase() + n.slice(1);
+                        names.push(n);
+                    }
+
+                    names.forEach(name => {
                         const div = document.createElement('div');
                         div.className = 'name-card';
-                        if(name === State.brand) div.classList.add('selected');
                         div.innerHTML = `
                             <div>
-                                <div class="name-text">${name}</div>
-                                <div style="font-size:0.8rem; color:#aaa; margin-top:5px;">${name.toLowerCase()}.com</div>
+                                <div class="name-main">${name}</div>
+                                <div style="color:var(--text-muted); font-size:0.8rem; margin-top:4px;">${name.toLowerCase()}.com</div>
                             </div>
-                            <span class="avail-badge">Available</span>
+                            <span class="domain-tag">Available</span>
                         `;
                         div.onclick = () => {
-                            State.brand = name;
-                            document.getElementById('display-brand').innerText = name;
+                            App.data.brandName = name;
+                            App.persist();
+                            document.getElementById('active-brand-display').innerText = name;
                             document.querySelectorAll('.name-card').forEach(c => c.classList.remove('selected'));
                             div.classList.add('selected');
                         };
@@ -428,236 +421,226 @@
                 }
             },
 
-            // 2. VISUAL PMF ENGINE (SVG Radar)
-            PMF: {
-                update: () => {
-                    State.pmf.price = parseInt(document.getElementById('pmf-price').value);
-                    State.pmf.quality = parseInt(document.getElementById('pmf-quality').value);
-                    State.pmf.brand = parseInt(document.getElementById('pmf-brand').value);
-                    State.pmf.access = parseInt(document.getElementById('pmf-access').value);
+            // 2. STRATEGY ENGINE
+            Strategy: {
+                run: () => {
+                    document.getElementById('strategy-output').style.display = 'block';
+                    const ind = App.data.industry;
                     
-                    // Draw Radar using SVG
-                    const size = 300;
-                    const center = size/2;
-                    const scale = 12; // Radius per unit
+                    // Templates
+                    const data = {
+                        tech: {
+                            s: ["Scalable software architecture", "Low marginal cost of replication"],
+                            w: ["High initial development time", "Requires constant updates"],
+                            o: ["Integration with AI tools", "Expansion into enterprise markets"],
+                            t: ["Rapidly changing technology", "Data privacy regulations"]
+                        },
+                        food: {
+                            s: ["Unique flavor profile", "Local sourcing appeal"],
+                            w: ["Perishable inventory", "Limited delivery radius"],
+                            o: ["Catering for corporate events", "Subscription boxes"],
+                            t: ["Rising ingredient costs", "Health regulation changes"]
+                        },
+                        fashion: {
+                            s: ["Strong brand aesthetic", "High profit margins per unit"],
+                            w: ["Seasonal inventory risk", "High return rates"],
+                            o: ["Influencer collaborations", "Sustainable material lines"],
+                            t: ["Fast fashion competitors", "Changing consumer trends"]
+                        }
+                    };
 
-                    // 4 Axis Points (Up, Right, Down, Left)
-                    const p1 = State.pmf.quality; // Up
-                    const p2 = State.pmf.price;   // Right
-                    const p3 = State.pmf.access;  // Down
-                    const p4 = State.pmf.brand;   // Left
+                    const content = data[ind] || data.tech;
+                    
+                    document.getElementById('swot-s').innerHTML = content.s.map(i => `• ${i}`).join('<br>');
+                    document.getElementById('swot-w').innerHTML = content.w.map(i => `• ${i}`).join('<br>');
+                    document.getElementById('swot-o').innerHTML = content.o.map(i => `• ${i}`).join('<br>');
+                    document.getElementById('swot-t').innerHTML = content.t.map(i => `• ${i}`).join('<br>');
 
-                    const coords = [
-                        [center, center - (p1 * scale)], // Top
-                        [center + (p2 * scale), center], // Right
-                        [center, center + (p3 * scale)], // Bottom
-                        [center - (p4 * scale), center]  // Left
-                    ];
-
-                    const pointsStr = coords.map(c => c.join(',')).join(' ');
-
-                    const svg = `
-                        <svg width="${size}" height="${size}" style="background:#18181b; border-radius:50%;">
-                            <circle cx="${center}" cy="${center}" r="${5*scale}" fill="none" stroke="#333" />
-                            <circle cx="${center}" cy="${center}" r="${10*scale}" fill="none" stroke="#333" />
-                            <line x1="${center}" y1="20" x2="${center}" y2="280" stroke="#333" />
-                            <line x1="20" y1="${center}" x2="280" y2="${center}" stroke="#333" />
-                            <polygon points="${pointsStr}" fill="rgba(59, 130, 246, 0.5)" stroke="#3b82f6" stroke-width="2" />
-                            <text x="${center}" y="15" fill="#a1a1aa" font-size="12" text-anchor="middle">Uniqueness</text>
-                            <text x="285" y="${center}" fill="#a1a1aa" font-size="12" text-anchor="start">Price</text>
-                            <text x="${center}" y="295" fill="#a1a1aa" font-size="12" text-anchor="middle">Access</text>
-                            <text x="15" y="${center}" fill="#a1a1aa" font-size="12" text-anchor="end">Brand</text>
-                        </svg>
+                    document.getElementById('marketing-ideas').innerHTML = `
+                        <ul style="padding-left:20px; color:var(--text-muted); line-height:1.8;">
+                            <li><strong>Launch Strategy:</strong> Offer a "Founder's Club" lifetime discount for the first 100 users.</li>
+                            <li><strong>Content:</strong> Document the "Building of ${App.data.brandName}" on social media to build authenticity.</li>
+                            <li><strong>Partnership:</strong> Collaborate with complementary brands in the ${ind} space for cross-promotion.</li>
+                        </ul>
                     `;
-                    
-                    document.getElementById('radar-chart').innerHTML = svg;
-                    
-                    // Score
-                    const total = p1+p2+p3+p4;
-                    const pct = Math.round((total/40)*100);
-                    document.getElementById('pmf-score').innerText = `Score: ${pct}/100`;
                 }
             },
 
-            // 3. FRAMER-GRADE WEBSITE BUILDER
+            // 3. WIX-LEVEL BUILDER
             Builder: {
-                selectedBlockId: null,
+                activeImgTarget: null,
+
+                init: () => {
+                    // Image upload listener
+                    document.getElementById('hidden-file-input').addEventListener('change', (e) => {
+                        if (e.target.files && e.target.files[0] && Modules.Builder.activeImgTarget) {
+                            const reader = new FileReader();
+                            reader.onload = function (evt) {
+                                Modules.Builder.activeImgTarget.src = evt.target.result;
+                                App.persist();
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
+                        }
+                    });
+                    Modules.Builder.renderFromData();
+                    Modules.Builder.updateTheme();
+                },
+
+                triggerUpload: (imgEl) => {
+                    Modules.Builder.activeImgTarget = imgEl;
+                    document.getElementById('hidden-file-input').click();
+                },
 
                 add: (type) => {
                     const id = 'blk-' + Date.now();
-                    const block = { id, type, bg: '#ffffff', color: '#111111', content: {} };
-                    
-                    if(type === 'hero') { block.content = { h1: 'The Future is Here', p: 'Start your journey with us.' }; block.padding = '80px 20px'; }
-                    if(type === 'features') { block.content = { h2: 'Our Features', items: ['Speed', 'Quality', 'Support'] }; block.bg = '#f4f4f5'; block.padding = '60px 20px'; }
-                    if(type === 'content') { block.content = { text: 'Write your story here. Click to edit this text directly.' }; block.padding = '40px 20px'; }
-                    if(type === 'contact') { block.content = { h2: 'Contact Us', email: 'hello@'+State.brand.toLowerCase()+'.com' }; block.bg = '#18181b'; block.color = '#ffffff'; block.padding = '60px 20px'; }
-                    if(type === 'gallery') { block.content = { h2: 'Gallery' }; block.padding = '40px 20px'; }
-
-                    State.website.push(block);
-                    Modules.Builder.render();
-                    Modules.Builder.renderLayerList();
+                    const block = { id, type, content: {} }; // Basic structural ref
+                    App.data.blocks.push(block);
+                    App.persist();
+                    Modules.Builder.renderBlock(block, true); // Append
                 },
 
-                setDevice: (mode) => {
-                    document.querySelectorAll('.device-toggle').forEach(b => b.classList.remove('active'));
-                    document.getElementById('btn-'+mode).classList.add('active');
-                    
-                    const frame = document.getElementById('device-frame');
-                    frame.className = `device-frame ${mode}`;
+                renderFromData: () => {
+                    const canvas = document.getElementById('canvas');
+                    canvas.innerHTML = '';
+                    App.data.blocks.forEach(b => Modules.Builder.renderBlock(b, false));
                 },
 
-                render: () => {
-                    const container = document.getElementById('device-frame');
-                    container.innerHTML = ''; // Clear
-
-                    State.website.forEach((block, index) => {
-                        const section = document.createElement('div');
-                        section.className = 'w-section';
-                        section.id = block.id;
-                        if(Modules.Builder.selectedBlockId === block.id) section.classList.add('selected');
-                        
-                        // Styles
-                        section.style.backgroundColor = block.bg;
-                        section.style.color = block.color;
-                        section.style.padding = block.padding || '40px 20px';
-                        section.style.position = 'relative';
-
-                        // Content Logic
-                        let html = '';
-                        if(block.type === 'hero') {
-                            html = `<h1 contenteditable="true" oninput="Modules.Builder.updateContent('${block.id}', 'h1', this.innerText)" style="font-size:3rem; margin-bottom:10px;">${block.content.h1}</h1>
-                                    <p contenteditable="true" oninput="Modules.Builder.updateContent('${block.id}', 'p', this.innerText)" style="font-size:1.2rem; opacity:0.8;">${block.content.p}</p>`;
-                        }
-                        else if(block.type === 'features') {
-                            html = `<h2 contenteditable="true" style="text-align:center; margin-bottom:40px;">${block.content.h2}</h2>
-                                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
-                                        ${block.content.items.map(i => `<div style="background:white; padding:20px; border-radius:8px; color:#111; box-shadow:0 2px 4px rgba(0,0,0,0.05);">${i}</div>`).join('')}
-                                    </div>`;
-                        }
-                        else if(block.type === 'contact') {
-                            html = `<div style="text-align:center;">
-                                        <h2>${block.content.h2}</h2>
-                                        <p>${block.content.email}</p>
-                                        <button style="background:${State.pmf.brand > 5 ? '#3b82f6' : '#10b981'}; color:white; border:none; padding:10px 20px; border-radius:4px; margin-top:20px;">Send Message</button>
-                                    </div>`;
-                        }
-                        else {
-                            html = `<div contenteditable="true">${block.content.text || block.content.h2}</div>`;
-                        }
-
-                        // Edit Actions (Hover)
-                        const actions = document.createElement('div');
-                        actions.className = 'w-actions';
-                        actions.innerHTML = `
-                            <span style="cursor:pointer;" onclick="Modules.Builder.move('${block.id}', -1)">↑</span>
-                            <span style="cursor:pointer;" onclick="Modules.Builder.move('${block.id}', 1)">↓</span>
-                            <span style="cursor:pointer;" onclick="Modules.Builder.deleteBlock('${block.id}')">×</span>
-                        `;
-
-                        section.innerHTML = html;
-                        section.appendChild(actions);
-
-                        // Selection Event
-                        section.addEventListener('click', (e) => {
-                            e.stopPropagation();
-                            Modules.Builder.selectBlock(block.id);
-                        });
-
-                        container.appendChild(section);
-                    });
-                },
-
-                updateContent: (id, key, val) => {
-                    const b = State.website.find(x => x.id === id);
-                    if(b) b.content[key] = val;
-                },
-
-                selectBlock: (id) => {
-                    Modules.Builder.selectedBlockId = id;
-                    Modules.Builder.render(); // Re-render to show border
+                renderBlock: (block, append) => {
+                    const div = document.createElement('div');
+                    div.className = 'web-block';
+                    div.id = block.id;
                     
-                    const block = State.website.find(b => b.id === id);
-                    const inspector = document.getElementById('inspector');
-                    const content = document.getElementById('inspector-content');
-                    
-                    inspector.classList.add('active');
-                    content.innerHTML = `
-                        <label>Background Color</label>
-                        <input type="color" value="${block.bg}" oninput="Modules.Builder.updateProp('${id}', 'bg', this.value)">
-                        <br><br>
-                        <label>Text Color</label>
-                        <input type="color" value="${block.color}" oninput="Modules.Builder.updateProp('${id}', 'color', this.value)">
-                        <br><br>
-                        <label>Block Type</label>
-                        <div style="color:white; padding:10px; background:#333; border-radius:4px;">${block.type.toUpperCase()}</div>
+                    // Hover Actions
+                    const actions = document.createElement('div');
+                    actions.className = 'block-actions';
+                    actions.innerHTML = `
+                        <button onclick="Modules.Builder.move('${block.id}', -1)">↑</button>
+                        <button onclick="Modules.Builder.move('${block.id}', 1)">↓</button>
+                        <button onclick="Modules.Builder.delete('${block.id}')">×</button>
                     `;
-                },
+                    div.appendChild(actions);
 
-                updateProp: (id, prop, val) => {
-                    const b = State.website.find(x => x.id === id);
-                    if(b) b[prop] = val;
-                    Modules.Builder.render();
-                },
+                    // Content Logic
+                    let html = '';
+                    const style = `padding: 40px 20px;`;
 
-                deleteBlock: (id) => {
-                    State.website = State.website.filter(b => b.id !== id);
-                    Modules.Builder.render();
-                    Modules.Builder.renderLayerList();
+                    if(block.type === 'hero') {
+                        div.style.cssText = `text-align: center; padding: 60px 20px; background: #f9fafb; ${style}`;
+                        html = `
+                            <h1 contenteditable="true" placeholder="Your Headline Here" style="font-size: 2.5rem; margin-bottom: 20px;">Welcome to ${App.data.brandName}</h1>
+                            <p contenteditable="true" placeholder="Subheadline goes here" style="font-size: 1.2rem; color: #666;">Describe your value proposition clearly.</p>
+                            <img src="https://placehold.co/800x400/e2e8f0/94a3b8?text=Click+To+Upload+Image" class="img-placeholder" style="width:100%; max-width:600px; margin-top:30px; border-radius:8px;" onclick="Modules.Builder.triggerUpload(this)">
+                        `;
+                    } else if (block.type === 'features') {
+                         div.style.cssText = `padding: 60px 20px; ${style}`;
+                         html = `
+                            <h2 contenteditable="true" style="text-align:center; margin-bottom:40px;">Our Features</h2>
+                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+                                <div style="padding:20px; border:1px solid #eee; border-radius:8px;">
+                                    <h3 contenteditable="true">Feature 1</h3>
+                                    <p contenteditable="true">Description.</p>
+                                </div>
+                                <div style="padding:20px; border:1px solid #eee; border-radius:8px;">
+                                    <h3 contenteditable="true">Feature 2</h3>
+                                    <p contenteditable="true">Description.</p>
+                                </div>
+                                <div style="padding:20px; border:1px solid #eee; border-radius:8px;">
+                                    <h3 contenteditable="true">Feature 3</h3>
+                                    <p contenteditable="true">Description.</p>
+                                </div>
+                            </div>
+                         `;
+                    } else if (block.type === 'gallery') {
+                        div.style.cssText = `padding: 40px 20px; ${style}`;
+                        html = `
+                            <h2 contenteditable="true" style="text-align:center;">Gallery</h2>
+                            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-top:20px;">
+                                <img src="https://placehold.co/300/e2e8f0/94a3b8?text=Upload" class="img-placeholder" style="width:100%; border-radius:4px;" onclick="Modules.Builder.triggerUpload(this)">
+                                <img src="https://placehold.co/300/e2e8f0/94a3b8?text=Upload" class="img-placeholder" style="width:100%; border-radius:4px;" onclick="Modules.Builder.triggerUpload(this)">
+                                <img src="https://placehold.co/300/e2e8f0/94a3b8?text=Upload" class="img-placeholder" style="width:100%; border-radius:4px;" onclick="Modules.Builder.triggerUpload(this)">
+                            </div>
+                        `;
+                    } else if (block.type === 'footer') {
+                        div.style.cssText = `background: #111; color: white; padding: 40px 20px; text-align: center; ${style}`;
+                        html = `<p contenteditable="true">&copy; 2026 ${App.data.brandName}. All rights reserved.</p>`;
+                    } else {
+                        // Generic Text
+                         div.style.cssText = `${style}`;
+                         html = `<div contenteditable="true">Click to edit this rich text block.</div>`;
+                    }
+
+                    div.insertAdjacentHTML('beforeend', html);
+                    const canvas = document.getElementById('canvas');
+                    if(append) canvas.appendChild(div); else canvas.appendChild(div);
                 },
 
                 move: (id, dir) => {
-                    const idx = State.website.findIndex(b => b.id === id);
-                    if(dir === -1 && idx > 0) {
-                        [State.website[idx], State.website[idx-1]] = [State.website[idx-1], State.website[idx]];
-                    } else if (dir === 1 && idx < State.website.length - 1) {
-                        [State.website[idx], State.website[idx+1]] = [State.website[idx+1], State.website[idx]];
+                    const idx = App.data.blocks.findIndex(b => b.id === id);
+                    if (dir === -1 && idx > 0) {
+                        [App.data.blocks[idx], App.data.blocks[idx-1]] = [App.data.blocks[idx-1], App.data.blocks[idx]];
+                    } else if (dir === 1 && idx < App.data.blocks.length - 1) {
+                        [App.data.blocks[idx], App.data.blocks[idx+1]] = [App.data.blocks[idx+1], App.data.blocks[idx]];
                     }
-                    Modules.Builder.render();
-                    Modules.Builder.renderLayerList();
+                    Modules.Builder.renderFromData();
                 },
 
-                renderLayerList: () => {
-                    const list = document.getElementById('layer-list');
-                    list.innerHTML = State.website.map((b, i) => `
-                        <div style="padding:8px; border:1px solid #333; border-radius:4px; font-size:0.8rem; display:flex; justify-content:space-between; cursor:pointer; background:${Modules.Builder.selectedBlockId === b.id ? '#333' : 'transparent'};" onclick="Modules.Builder.selectBlock('${b.id}')">
-                            <span>${i+1}. ${b.type.toUpperCase()}</span>
-                        </div>
-                    `).join('');
+                delete: (id) => {
+                    App.data.blocks = App.data.blocks.filter(b => b.id !== id);
+                    Modules.Builder.renderFromData();
                 },
 
-                exportHTML: () => {
-                    const frame = document.getElementById('device-frame').cloneNode(true);
-                    // Cleanup helpers
-                    frame.querySelectorAll('.w-actions').forEach(e => e.remove());
-                    frame.querySelectorAll('*').forEach(e => {
-                        e.contentEditable = "false";
-                        e.style.border = "none";
-                        e.classList.remove('selected', 'w-section');
-                    });
+                setMode: (mode) => {
+                    const f = document.getElementById('canvas');
+                    f.className = `canvas-frame ${mode}`;
+                },
 
-                    const html = `
-<!DOCTYPE html>
-<html>
-<head>
-<title>${State.brand} - Official Site</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>body{margin:0;font-family:sans-serif;} *{box-sizing:border-box}</style>
-</head>
-<body>
-${frame.innerHTML}
-</body>
-</html>`;
+                updateTheme: () => {
+                    const color = document.getElementById('theme-color').value;
+                    const font = document.getElementById('theme-font').value;
+                    const canvas = document.getElementById('canvas');
                     
-                    const blob = new Blob([html], { type: 'text/html' });
+                    canvas.style.fontFamily = font;
+                    // Inject dynamic style for buttons inside canvas
+                    let styleTag = document.getElementById('dynamic-theme-style');
+                    if(!styleTag) {
+                        styleTag = document.createElement('style');
+                        styleTag.id = 'dynamic-theme-style';
+                        document.body.appendChild(styleTag);
+                    }
+                    styleTag.innerHTML = `
+                        #canvas h1, #canvas h2, #canvas h3 { color: #111; }
+                        #canvas button { background-color: ${color} !important; }
+                        #canvas .web-block:hover { border-color: ${color} !important; }
+                        #canvas .block-actions { background-color: ${color} !important; }
+                    `;
+                },
+
+                exportSite: () => {
+                    const clone = document.getElementById('canvas').cloneNode(true);
+                    // Cleanup
+                    clone.querySelectorAll('.block-actions').forEach(e => e.remove());
+                    clone.querySelectorAll('[contenteditable]').forEach(e => e.removeAttribute('contenteditable'));
+                    clone.className = ''; // remove width restrictions
+                    clone.style.width = '100%';
+                    clone.style.maxWidth = '100%';
+                    clone.style.border = 'none';
+                    
+                    const html = `<!DOCTYPE html><html><head><title>${App.data.brandName}</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1">
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@600&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
+                    <style>body{margin:0;font-family:${document.getElementById('theme-font').value};line-height:1.6;} img{max-width:100%;height:auto;}</style>
+                    </head><body>${clone.innerHTML}</body></html>`;
+                    
+                    const blob = new Blob([html], {type: 'text/html'});
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
-                    a.download = `${State.brand}-site.html`;
+                    a.download = 'website.html';
                     a.click();
                 }
             }
         };
 
-        // Initialize App
+        // Boot
         window.onload = App.init;
 
     </script>
