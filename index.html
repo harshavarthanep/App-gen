@@ -3,671 +3,663 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrandForge Ultimate | Visual Site OS</title>
+    <title>LaunchOS | The Founder's Operating System</title>
+    
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&family=Space+Grotesk:wght@500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* --- SYSTEM UI VARIABLES --- */
+        /* --- SYSTEM THEME --- */
         :root {
-            --app-bg: #0f172a;
-            --panel-bg: #1e293b;
-            --border: #334155;
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-            --accent: #22d3ee;
-            --danger: #ef4444;
-            --success: #10b981;
-            --radius: 6px;
-            --font-ui: 'Inter', system-ui, sans-serif;
+            --bg-app: #09090b;       /* Zinc 950 */
+            --bg-panel: #18181b;     /* Zinc 900 */
+            --bg-surface: #27272a;   /* Zinc 800 */
+            --border: #3f3f46;       /* Zinc 700 */
+            --primary: #3b82f6;      /* Blue 500 */
+            --primary-glow: rgba(59, 130, 246, 0.3);
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --accent-purple: #8b5cf6;
+            --accent-teal: #14b8a6;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --shadow-float: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.5);
+            --font-ui: 'Inter', sans-serif;
+            --font-display: 'Outfit', sans-serif;
         }
 
         /* --- GLOBAL RESET --- */
         * { box-sizing: border-box; outline: none; -webkit-font-smoothing: antialiased; }
-        body { margin: 0; font-family: var(--font-ui); background: var(--app-bg); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+        body { margin: 0; background: var(--bg-app); color: var(--text-main); font-family: var(--font-ui); height: 100vh; overflow: hidden; display: flex; }
         
-        /* --- APP LAYOUT --- */
-        .app-shell { display: flex; width: 100%; height: 100%; }
+        /* --- SIDEBAR --- */
+        aside { width: 260px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 50; }
+        .brand-area { padding: 24px; font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; letter-spacing: -0.5px; }
+        .brand-area i { color: var(--primary); }
         
-        /* SIDEBAR (Tools) */
-        .sidebar { width: 60px; background: var(--panel-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding-top: 20px; z-index: 50; flex-shrink: 0; }
-        .nav-icon { width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center; font-size: 20px; color: var(--text-sub); cursor: pointer; transition: 0.2s; margin-bottom: 15px; position: relative; }
-        .nav-icon:hover { color: white; background: rgba(255,255,255,0.05); }
-        .nav-icon.active { background: var(--primary); color: white; }
-        .nav-icon.active::after { content: ''; position: absolute; right: -10px; width: 3px; height: 20px; background: white; border-radius: 2px 0 0 2px; }
-
-        /* LEFT PANEL (Context) */
-        .panel-left { width: 280px; background: var(--panel-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.3s; flex-shrink: 0; }
-        .panel-header { padding: 16px; border-bottom: 1px solid var(--border); font-weight: 600; font-family: 'Outfit', sans-serif; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center; }
-        .panel-content { flex: 1; overflow-y: auto; padding: 15px; }
-
-        /* CENTER CANVAS (Workspace) */
-        .workspace { flex: 1; background: #0f172a; position: relative; display: flex; flex-direction: column; overflow: hidden; }
-        .toolbar { height: 50px; border-bottom: 1px solid var(--border); background: var(--panel-bg); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
-        
-        /* The Website Canvas */
-        .canvas-container { flex: 1; overflow-y: auto; padding: 40px; display: flex; justify-content: center; background: url('data:image/svg+xml;utf8,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.05)"/></svg>'); }
-        .artboard { 
-            width: 100%; max-width: 1100px; min-height: 800px; background: white; color: #111; 
-            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5); border-radius: 2px; transition: width 0.3s;
-            position: relative;
+        .nav-list { flex: 1; padding: 0 12px; display: flex; flex-direction: column; gap: 4px; }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: var(--radius-sm);
+            color: var(--text-muted); cursor: pointer; transition: 0.2s; font-weight: 500; font-size: 0.9rem;
         }
-        /* Mobile/Tablet Views */
-        .artboard.mobile { max-width: 375px; }
-        .artboard.tablet { max-width: 768px; }
-
-        /* RIGHT PANEL (Inspector) */
-        .panel-right { width: 280px; background: var(--panel-bg); border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+        .nav-item:hover { background: var(--bg-surface); color: white; }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 0 15px var(--primary-glow); }
+        .nav-item.locked { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
         
+        /* --- MAIN AREA --- */
+        main { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+        .view-container { flex: 1; overflow-y: auto; padding: 40px; display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .view-container.active { display: block; opacity: 1; }
+
         /* --- UI COMPONENTS --- */
-        .btn { background: var(--primary); color: white; border: none; padding: 8px 16px; border-radius: var(--radius); font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
-        .btn:hover { background: var(--primary-hover); }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-outline:hover { background: rgba(255,255,255,0.05); border-color: var(--text-sub); }
-        .btn-sm { padding: 4px 8px; font-size: 0.75rem; }
+        h1 { font-family: var(--font-display); font-size: 2.5rem; margin: 0 0 10px 0; letter-spacing: -1px; }
+        p.desc { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin-bottom: 40px; line-height: 1.6; }
         
-        .form-group { margin-bottom: 12px; }
-        label { display: block; font-size: 0.75rem; color: var(--text-sub); margin-bottom: 4px; font-weight: 600; }
-        input, select, textarea { 
-            width: 100%; background: #0f172a; border: 1px solid var(--border); color: white; 
-            padding: 8px; border-radius: 4px; font-size: 0.85rem; font-family: var(--font-ui); 
+        .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px; position: relative; overflow: hidden; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+
+        label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+        input, select, textarea {
+            width: 100%; background: var(--bg-app); border: 1px solid var(--border); color: white; padding: 12px;
+            border-radius: var(--radius-sm); font-size: 1rem; transition: 0.2s; font-family: var(--font-ui);
         }
-        input:focus { border-color: var(--primary); }
+        input:focus, textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-glow); }
 
-        /* --- BUILDER ELEMENTS --- */
-        /* These styles exist INSIDE the artboard */
-        .artboard section { position: relative; border: 2px solid transparent; transition: 0.2s; }
-        .artboard section:hover { border-color: rgba(99, 102, 241, 0.3); }
-        .artboard section.selected { border-color: var(--primary); }
-        
-        /* Editing Overlays */
-        .hover-actions { 
-            position: absolute; top: -25px; right: 0; background: var(--primary); 
-            color: white; border-radius: 4px 4px 0 0; display: none; padding: 2px 8px; font-size: 0.7rem; z-index: 10;
+        .btn {
+            background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: var(--radius-sm);
+            font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 1rem;
+            transition: transform 0.1s;
         }
-        .artboard section:hover .hover-actions { display: flex; gap: 5px; }
+        .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-large { width: 100%; justify-content: center; padding: 16px; font-size: 1.1rem; }
         
-        /* Text Editable */
-        [contenteditable]:focus { outline: 2px solid var(--accent); border-radius: 2px; }
+        /* --- MODULE: NAME GENERATOR --- */
+        .name-card {
+            background: var(--bg-surface); border: 1px solid var(--border); padding: 20px; border-radius: var(--radius-md);
+            cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center;
+        }
+        .name-card:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-float); }
+        .name-card.selected { background: rgba(59, 130, 246, 0.1); border-color: var(--primary); }
+        .name-text { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: white; }
+        .avail-badge { font-size: 0.75rem; background: rgba(16, 185, 129, 0.2); color: #34d399; padding: 4px 8px; border-radius: 20px; font-weight: 600; text-transform: uppercase; }
 
-        /* --- CHART & BRANDING --- */
-        .chart-container { width: 100%; height: 200px; position: relative; }
-        .name-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 15px; border-radius: 6px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .name-card:hover { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
-        .name-card.selected { border: 2px solid var(--primary); background: rgba(99, 102, 241, 0.2); }
+        /* --- MODULE: STRATEGY (RADAR) --- */
+        .radar-container { width: 300px; height: 300px; margin: 0 auto; position: relative; }
+        .slider-group { margin-bottom: 15px; }
+        .slider-group input { width: 100%; margin-top: 5px; cursor: pointer; }
 
-        /* --- BLOCK PREVIEWS (Sidebar) --- */
-        .block-preview { padding: 10px; border: 1px solid var(--border); border-radius: 4px; margin-bottom: 8px; cursor: grab; background: rgba(255,255,255,0.02); display: flex; align-items: center; gap: 10px; font-size: 0.85rem; }
-        .block-preview:hover { border-color: var(--primary); color: white; }
+        /* --- MODULE: WEBSITE BUILDER (FRAMER STYLE) --- */
+        .builder-layout { display: flex; height: 100%; width: 100%; background: #111; }
+        
+        /* Left: Layers/Add */
+        .b-sidebar { width: 280px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+        .b-header { padding: 16px; border-bottom: 1px solid var(--border); font-weight: 600; color: white; display: flex; justify-content: space-between; }
+        .b-tools { padding: 16px; overflow-y: auto; flex: 1; }
+        
+        .block-btn {
+            display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px; background: var(--bg-surface);
+            border: 1px solid var(--border); color: var(--text-muted); border-radius: var(--radius-sm); margin-bottom: 8px;
+            cursor: pointer; transition: 0.2s; font-size: 0.9rem;
+        }
+        .block-btn:hover { color: white; border-color: var(--text-muted); background: var(--bg-surface); }
+        .block-btn i { font-size: 1.1rem; }
 
-        /* Hide Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--app-bg); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+        /* Center: Canvas */
+        .b-canvas-area { flex: 1; background: #09090b; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        
+        .b-toolbar {
+            height: 50px; background: var(--bg-panel); border-bottom: 1px solid var(--border); display: flex; 
+            align-items: center; justify-content: center; gap: 20px; padding: 0 20px;
+        }
+        .device-toggle {
+            background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;
+            padding: 8px; border-radius: 6px; transition: 0.2s;
+        }
+        .device-toggle:hover { color: white; background: var(--bg-surface); }
+        .device-toggle.active { color: var(--primary); background: rgba(59, 130, 246, 0.1); }
+        
+        .b-viewport { flex: 1; overflow-y: auto; display: flex; justify-content: center; padding: 40px; background-image: radial-gradient(#333 1px, transparent 1px); background-size: 20px 20px; }
+        
+        /* THE DEVICE FRAME */
+        .device-frame {
+            background: white; transition: width 0.3s ease; box-shadow: var(--shadow-float);
+            display: flex; flex-direction: column; overflow: hidden; position: relative;
+        }
+        .device-frame.desktop { width: 1024px; min-height: 800px; border-radius: 4px; }
+        .device-frame.mobile { width: 375px; min-height: 667px; border-radius: 30px; border: 8px solid #27272a; }
+
+        /* Sections inside Canvas */
+        .w-section { position: relative; transition: all 0.2s; border: 2px solid transparent; }
+        .w-section:hover { border-color: var(--primary); }
+        .w-section.selected { border-color: var(--accent-purple); }
+        
+        /* Edit Actions Hover */
+        .w-actions { 
+            position: absolute; top: 0; right: 0; background: var(--primary); color: white; 
+            padding: 4px 8px; font-size: 12px; display: none; border-bottom-left-radius: 6px; z-index: 10;
+        }
+        .w-section:hover .w-actions { display: flex; gap: 8px; }
+
+        /* Right: Inspector */
+        .b-inspector { width: 260px; background: var(--bg-panel); border-left: 1px solid var(--border); padding: 20px; display: none; }
+        .b-inspector.active { display: block; }
     </style>
 </head>
 <body>
 
-<div class="app-shell">
-    
-    <aside class="sidebar">
-        <div class="nav-icon" id="nav-home" onclick="UI.switchTab('home')" title="Project"><i class="ph ph-rocket"></i></div>
-        <div class="nav-icon active" id="nav-builder" onclick="UI.switchTab('builder')" title="Website Builder"><i class="ph ph-desktop"></i></div>
-        <div class="nav-icon" id="nav-brand" onclick="UI.switchTab('brand')" title="Branding Engine"><i class="ph ph-magic-wand"></i></div>
-        <div class="nav-icon" id="nav-strategy" onclick="UI.switchTab('strategy')" title="Strategy Radar"><i class="ph ph-chart-polar"></i></div>
-        <div style="flex:1"></div>
-        <div class="nav-icon" onclick="Project.save()" title="Save Project"><i class="ph ph-floppy-disk"></i></div>
+    <aside>
+        <div class="brand-area"><i class="ph-fill ph-rocket-launch"></i> LaunchOS</div>
+        <div class="nav-list">
+            <div class="nav-item active" id="nav-profile" onclick="App.router('profile')">
+                <i class="ph ph-user-circle"></i> 1. Profile
+            </div>
+            <div class="nav-item locked" id="nav-names" onclick="App.router('names')">
+                <i class="ph ph-magic-wand"></i> 2. Identity
+            </div>
+            <div class="nav-item locked" id="nav-pmf" onclick="App.router('pmf')">
+                <i class="ph ph-chart-polar"></i> 3. Strategy (PMF)
+            </div>
+            <div class="nav-item locked" id="nav-builder" onclick="App.router('builder')">
+                <i class="ph ph-desktop"></i> 4. Website Builder
+            </div>
+        </div>
+        <div style="margin-top: auto; padding: 20px;">
+            <button class="btn" style="width: 100%; font-size: 0.85rem;" onclick="App.saveProject()">
+                <i class="ph ph-floppy-disk"></i> Save Project
+            </button>
+        </div>
     </aside>
 
-    <div class="panel-left" id="panel-left">
-        </div>
-
-    <div class="workspace">
-        <div class="toolbar">
-            <div style="display:flex; gap:10px; align-items:center;">
-                <span id="project-name-display" style="font-weight:700;">Untitled Project</span>
-                <span style="font-size:0.75rem; color:var(--text-sub); background:rgba(255,255,255,0.05); padding:2px 6px; border-radius:4px;">Draft</span>
-            </div>
-            <div style="display:flex; gap:5px;">
-                <button class="nav-icon" style="margin:0; width:32px; height:32px;" onclick="Builder.setDevice('desktop')"><i class="ph ph-desktop"></i></button>
-                <button class="nav-icon" style="margin:0; width:32px; height:32px;" onclick="Builder.setDevice('tablet')"><i class="ph ph-device-tablet"></i></button>
-                <button class="nav-icon" style="margin:0; width:32px; height:32px;" onclick="Builder.setDevice('mobile')"><i class="ph ph-device-mobile"></i></button>
-            </div>
-            <div>
-                <button class="btn btn-outline" onclick="Builder.exportHTML()"><i class="ph ph-export"></i> Export Code</button>
-            </div>
-        </div>
-
-        <div class="canvas-container">
-            <div id="artboard" class="artboard">
+    <main>
+        
+        <div id="view-profile" class="view-container active">
+            <h1>Start Your Empire.</h1>
+            <p class="desc">Tell us about your vision. Our AI algorithms use this DNA to generate your brand, validate your strategy, and build your site.</p>
+            
+            <div class="card" style="max-width: 800px;">
+                <div class="grid-2">
+                    <div>
+                        <label>Industry</label>
+                        <select id="inp-industry">
+                            <option value="tech">Technology / SaaS</option>
+                            <option value="food">Food & Beverage</option>
+                            <option value="fashion">Fashion & Lifestyle</option>
+                            <option value="health">Health & Wellness</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Seed Keyword</label>
+                        <input type="text" id="inp-keyword" placeholder="e.g. Code, Brownie, Yoga">
+                    </div>
                 </div>
+                <br>
+                <div class="grid-2">
+                     <div>
+                        <label>Business Description</label>
+                        <textarea id="inp-desc" rows="4" placeholder="e.g. We sell organic kelveragu brownies that taste modern but are healthy..."></textarea>
+                    </div>
+                     <div>
+                        <label>Target Audience</label>
+                        <textarea id="inp-audience" rows="4" placeholder="e.g. Gen Z, Fitness Enthusiasts, Busy Moms..."></textarea>
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-large" onclick="App.completeProfile()">Initialize Project <i class="ph ph-arrow-right"></i></button>
+            </div>
         </div>
-    </div>
 
-    <div class="panel-right" id="inspector-panel">
-        <div class="panel-header">
-            <span>Inspector</span>
-            <span style="font-size:0.7rem; color:var(--text-sub);">Select Element</span>
+        <div id="view-names" class="view-container">
+            <h1>Brand Identity.</h1>
+            <p class="desc">Linguistic algorithms generate available, high-impact brand names based on your industry topology.</p>
+            
+            <div class="card">
+                <div class="grid-2">
+                    <button class="btn" onclick="Modules.Naming.generate()">Generate New Set</button>
+                    <div style="text-align: right; color: var(--text-muted); align-self: center;">
+                        Selected: <strong style="color:white" id="display-brand">None</strong>
+                    </div>
+                </div>
+                <div class="grid-3" id="name-grid" style="margin-top: 30px;">
+                    </div>
+            </div>
+            <div style="text-align: right;">
+                <button class="btn" onclick="App.unlock('pmf')">Next: Strategy <i class="ph ph-arrow-right"></i></button>
+            </div>
         </div>
-        <div class="panel-content" id="inspector-content">
-            <p style="text-align:center; color:var(--text-sub); margin-top:20px;">Click any element on the website canvas to edit its styles.</p>
+
+        <div id="view-pmf" class="view-container">
+            <h1>Market Fit Analysis.</h1>
+            <p class="desc">Visualize how your business stacks up against the competition using our proprietary scoring engine.</p>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Your Metrics</h3>
+                    <div class="slider-group">
+                        <label>Price Competitiveness (Low Cost = High Score)</label>
+                        <input type="range" min="1" max="10" value="7" id="pmf-price" oninput="Modules.PMF.update()">
+                    </div>
+                    <div class="slider-group">
+                        <label>Product Uniqueness (Quality/Features)</label>
+                        <input type="range" min="1" max="10" value="8" id="pmf-quality" oninput="Modules.PMF.update()">
+                    </div>
+                    <div class="slider-group">
+                        <label>Brand & Storytelling</label>
+                        <input type="range" min="1" max="10" value="6" id="pmf-brand" oninput="Modules.PMF.update()">
+                    </div>
+                    <div class="slider-group">
+                        <label>Ease of Access (Distribution)</label>
+                        <input type="range" min="1" max="10" value="5" id="pmf-access" oninput="Modules.PMF.update()">
+                    </div>
+                </div>
+
+                <div class="card" style="display:flex; justify-content:center; align-items:center; flex-direction:column;">
+                    <div id="radar-chart" class="radar-container"></div>
+                    <div style="margin-top:20px; text-align:center;">
+                        <h2 id="pmf-score" style="color:var(--accent-teal)">Score: 82/100</h2>
+                        <span style="color:var(--text-muted)">Strong Market Fit</span>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: right;">
+                <button class="btn" onclick="App.unlock('builder')">Next: Build Website <i class="ph ph-arrow-right"></i></button>
+            </div>
         </div>
-    </div>
 
-</div>
+        <div id="view-builder" class="view-container" style="padding: 0; height: 100%;">
+            <div class="builder-layout">
+                
+                <div class="b-sidebar">
+                    <div class="b-header">
+                        <span>Components</span>
+                    </div>
+                    <div class="b-tools">
+                        <button class="block-btn" onclick="Modules.Builder.add('hero')"><i class="ph ph-image-square"></i> Hero Section</button>
+                        <button class="block-btn" onclick="Modules.Builder.add('features')"><i class="ph ph-squares-four"></i> Feature Grid</button>
+                        <button class="block-btn" onclick="Modules.Builder.add('content')"><i class="ph ph-article"></i> Rich Content</button>
+                        <button class="block-btn" onclick="Modules.Builder.add('gallery')"><i class="ph ph-images"></i> Gallery</button>
+                        <button class="block-btn" onclick="Modules.Builder.add('contact')"><i class="ph ph-envelope"></i> Contact Us</button>
+                        
+                        <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 10px;">
+                            <label>Page Structure</label>
+                            <div id="layer-list" style="display: flex; flex-direction: column; gap: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
 
-<script>
-    /* --- DATA STORE --- */
-    const State = {
-        meta: {
-            industry: 'tech',
-            name: 'BrandZero',
-            desc: 'The best startup in the world.'
-        },
-        competitors: [
-            { name: "Competitor A", price: 8, quality: 5, brand: 6 },
-            { name: "Competitor B", price: 4, quality: 9, brand: 8 }
-        ],
-        // The Website Blocks
-        website: [
-            {
-                id: 'hero-1',
-                type: 'hero',
-                styles: { background: '#ffffff', padding: '80px 20px', textAlign: 'center' },
-                content: { h1: 'Build Your Dream.', p: 'Edit this text directly. Click any element to style it.', btn: 'Get Started' },
-                elementStyles: {
-                    h1: { fontSize: '3.5rem', color: '#111827', marginBottom: '20px' },
-                    p: { fontSize: '1.2rem', color: '#4b5563', marginBottom: '30px' },
-                    btn: { background: '#6366f1', color: '#ffffff', padding: '12px 30px', borderRadius: '6px' }
+                <div class="b-canvas-area">
+                    <div class="b-toolbar">
+                        <button class="device-toggle active" id="btn-desktop" onclick="Modules.Builder.setDevice('desktop')"><i class="ph ph-desktop"></i></button>
+                        <button class="device-toggle" id="btn-mobile" onclick="Modules.Builder.setDevice('mobile')"><i class="ph ph-device-mobile"></i></button>
+                        <div style="width: 1px; height: 20px; background: var(--border); margin: 0 10px;"></div>
+                        <button class="btn btn-sm" onclick="Modules.Builder.exportHTML()">Export <i class="ph ph-export"></i></button>
+                    </div>
+                    
+                    <div class="b-viewport">
+                        <div id="device-frame" class="device-frame desktop">
+                            </div>
+                    </div>
+                </div>
+
+                <div class="b-inspector" id="inspector">
+                    <div class="b-header" style="padding-left:0;">Properties</div>
+                    <div id="inspector-content" style="margin-top: 20px;">
+                        <p style="color:var(--text-muted); font-size:0.9rem;">Select a block to edit properties.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        /* --- STATE MANAGEMENT --- */
+        const State = {
+            profile: { industry: 'tech', keyword: '', desc: '', audience: '' },
+            brand: 'BrandZero',
+            pmf: { price: 7, quality: 8, brand: 6, access: 5 },
+            website: [
+                { id: 'b1', type: 'hero', bg: '#ffffff', color: '#111111', content: { h1: 'Your Vision, Realized.', p: 'Click here to edit this text. Build your future.' } }
+            ]
+        };
+
+        /* --- APP CONTROLLER --- */
+        const App = {
+            init: () => {
+                // Check Load
+                if(localStorage.getItem('launchOS_data')) {
+                    const saved = JSON.parse(localStorage.getItem('launchOS_data'));
+                    Object.assign(State, saved);
+                    ['names', 'pmf', 'builder'].forEach(id => document.getElementById('nav-'+id).classList.remove('locked'));
+                    document.getElementById('display-brand').innerText = State.brand;
+                }
+                Modules.Builder.render(); // Init builder
+            },
+
+            router: (page) => {
+                if(document.getElementById('nav-'+page).classList.contains('locked')) return;
+                
+                // Sidebar Active
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                document.getElementById('nav-'+page).classList.add('active');
+
+                // View Switch
+                document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+                document.getElementById('view-'+page).classList.add('active');
+
+                // Specific Init
+                if(page === 'names') Modules.Naming.generate();
+                if(page === 'pmf') Modules.PMF.update();
+                if(page === 'builder') Modules.Builder.render();
+            },
+
+            completeProfile: () => {
+                State.profile.industry = document.getElementById('inp-industry').value;
+                State.profile.keyword = document.getElementById('inp-keyword').value;
+                State.profile.desc = document.getElementById('inp-desc').value;
+                State.profile.audience = document.getElementById('inp-audience').value;
+                
+                App.unlock('names');
+            },
+
+            unlock: (page) => {
+                document.getElementById('nav-'+page).classList.remove('locked');
+                App.router(page);
+                App.saveProject();
+            },
+
+            saveProject: () => {
+                localStorage.setItem('launchOS_data', JSON.stringify(State));
+                // Toast Simulation
+                const btn = document.querySelector('.nav-list + div button');
+                const original = btn.innerHTML;
+                btn.innerHTML = `<i class="ph ph-check"></i> Saved!`;
+                setTimeout(() => btn.innerHTML = original, 2000);
+            }
+        };
+
+        /* --- MODULES --- */
+        const Modules = {
+            
+            // 1. ADVANCED NAMING ENGINE
+            Naming: {
+                generate: () => {
+                    const seed = State.profile.keyword.replace(/[^a-zA-Z]/g, '') || "Core";
+                    const ind = State.profile.industry;
+                    
+                    // Morphemes
+                    const prefixes = ind === 'food' ? ['Nu', 'Vita', 'Pure', 'Coco', 'Zest'] : ['Sys', 'Net', 'Nov', 'Vel', 'Aer'];
+                    const suffixes = ind === 'food' ? ['eats', 'ly', 'bowl', 'root', 'kitchen'] : ['ify', 'os', 'ix', 'ex', 'flow'];
+                    const techRoots = ['Luma', 'Kinet', 'Virt', 'Synt', 'Quant'];
+                    
+                    let results = [];
+                    
+                    // Algorithm 1: Blends
+                    for(let i=0; i<3; i++) results.push(prefixes[Math.floor(Math.random()*prefixes.length)] + seed);
+                    // Algorithm 2: Tech/Abstract
+                    for(let i=0; i<3; i++) results.push(techRoots[Math.floor(Math.random()*techRoots.length)] + suffixes[Math.floor(Math.random()*suffixes.length)]);
+                    // Algorithm 3: Suffix
+                    for(let i=0; i<3; i++) results.push(seed + suffixes[Math.floor(Math.random()*suffixes.length)]);
+
+                    // Render
+                    const grid = document.getElementById('name-grid');
+                    grid.innerHTML = '';
+                    results.forEach(name => {
+                        const div = document.createElement('div');
+                        div.className = 'name-card';
+                        if(name === State.brand) div.classList.add('selected');
+                        div.innerHTML = `
+                            <div>
+                                <div class="name-text">${name}</div>
+                                <div style="font-size:0.8rem; color:#aaa; margin-top:5px;">${name.toLowerCase()}.com</div>
+                            </div>
+                            <span class="avail-badge">Available</span>
+                        `;
+                        div.onclick = () => {
+                            State.brand = name;
+                            document.getElementById('display-brand').innerText = name;
+                            document.querySelectorAll('.name-card').forEach(c => c.classList.remove('selected'));
+                            div.classList.add('selected');
+                        };
+                        grid.appendChild(div);
+                    });
                 }
             },
-            {
-                id: 'features-1',
-                type: 'features',
-                styles: { background: '#f8fafc', padding: '60px 20px' },
-                content: { title: 'Why Choose Us', items: ['Speed', 'Security', 'Scale'] },
-                elementStyles: {
-                    title: { fontSize: '2.5rem', color: '#1e293b', textAlign: 'center', marginBottom: '40px' }
+
+            // 2. VISUAL PMF ENGINE (SVG Radar)
+            PMF: {
+                update: () => {
+                    State.pmf.price = parseInt(document.getElementById('pmf-price').value);
+                    State.pmf.quality = parseInt(document.getElementById('pmf-quality').value);
+                    State.pmf.brand = parseInt(document.getElementById('pmf-brand').value);
+                    State.pmf.access = parseInt(document.getElementById('pmf-access').value);
+                    
+                    // Draw Radar using SVG
+                    const size = 300;
+                    const center = size/2;
+                    const scale = 12; // Radius per unit
+
+                    // 4 Axis Points (Up, Right, Down, Left)
+                    const p1 = State.pmf.quality; // Up
+                    const p2 = State.pmf.price;   // Right
+                    const p3 = State.pmf.access;  // Down
+                    const p4 = State.pmf.brand;   // Left
+
+                    const coords = [
+                        [center, center - (p1 * scale)], // Top
+                        [center + (p2 * scale), center], // Right
+                        [center, center + (p3 * scale)], // Bottom
+                        [center - (p4 * scale), center]  // Left
+                    ];
+
+                    const pointsStr = coords.map(c => c.join(',')).join(' ');
+
+                    const svg = `
+                        <svg width="${size}" height="${size}" style="background:#18181b; border-radius:50%;">
+                            <circle cx="${center}" cy="${center}" r="${5*scale}" fill="none" stroke="#333" />
+                            <circle cx="${center}" cy="${center}" r="${10*scale}" fill="none" stroke="#333" />
+                            <line x1="${center}" y1="20" x2="${center}" y2="280" stroke="#333" />
+                            <line x1="20" y1="${center}" x2="280" y2="${center}" stroke="#333" />
+                            <polygon points="${pointsStr}" fill="rgba(59, 130, 246, 0.5)" stroke="#3b82f6" stroke-width="2" />
+                            <text x="${center}" y="15" fill="#a1a1aa" font-size="12" text-anchor="middle">Uniqueness</text>
+                            <text x="285" y="${center}" fill="#a1a1aa" font-size="12" text-anchor="start">Price</text>
+                            <text x="${center}" y="295" fill="#a1a1aa" font-size="12" text-anchor="middle">Access</text>
+                            <text x="15" y="${center}" fill="#a1a1aa" font-size="12" text-anchor="end">Brand</text>
+                        </svg>
+                    `;
+                    
+                    document.getElementById('radar-chart').innerHTML = svg;
+                    
+                    // Score
+                    const total = p1+p2+p3+p4;
+                    const pct = Math.round((total/40)*100);
+                    document.getElementById('pmf-score').innerText = `Score: ${pct}/100`;
                 }
-            }
-        ]
-    };
+            },
 
-    /* --- UI CONTROLLER --- */
-    const UI = {
-        activeTab: 'builder',
+            // 3. FRAMER-GRADE WEBSITE BUILDER
+            Builder: {
+                selectedBlockId: null,
 
-        init: () => {
-            UI.renderLeftPanel();
-            Builder.render();
-            // Auto-load
-            if(localStorage.getItem('brandForgePro')) {
-                const saved = JSON.parse(localStorage.getItem('brandForgePro'));
-                Object.assign(State, saved);
-                document.getElementById('project-name-display').innerText = State.meta.name;
-                Builder.render();
-            }
-        },
+                add: (type) => {
+                    const id = 'blk-' + Date.now();
+                    const block = { id, type, bg: '#ffffff', color: '#111111', content: {} };
+                    
+                    if(type === 'hero') { block.content = { h1: 'The Future is Here', p: 'Start your journey with us.' }; block.padding = '80px 20px'; }
+                    if(type === 'features') { block.content = { h2: 'Our Features', items: ['Speed', 'Quality', 'Support'] }; block.bg = '#f4f4f5'; block.padding = '60px 20px'; }
+                    if(type === 'content') { block.content = { text: 'Write your story here. Click to edit this text directly.' }; block.padding = '40px 20px'; }
+                    if(type === 'contact') { block.content = { h2: 'Contact Us', email: 'hello@'+State.brand.toLowerCase()+'.com' }; block.bg = '#18181b'; block.color = '#ffffff'; block.padding = '60px 20px'; }
+                    if(type === 'gallery') { block.content = { h2: 'Gallery' }; block.padding = '40px 20px'; }
 
-        switchTab: (tab) => {
-            UI.activeTab = tab;
-            document.querySelectorAll('.nav-icon').forEach(el => el.classList.remove('active'));
-            document.getElementById('nav-'+tab).classList.add('active');
-            UI.renderLeftPanel();
-        },
+                    State.website.push(block);
+                    Modules.Builder.render();
+                    Modules.Builder.renderLayerList();
+                },
 
-        renderLeftPanel: () => {
-            const container = document.getElementById('panel-left');
-            container.innerHTML = '';
+                setDevice: (mode) => {
+                    document.querySelectorAll('.device-toggle').forEach(b => b.classList.remove('active'));
+                    document.getElementById('btn-'+mode).classList.add('active');
+                    
+                    const frame = document.getElementById('device-frame');
+                    frame.className = `device-frame ${mode}`;
+                },
 
-            // 1. HOME / PROFILE
-            if (UI.activeTab === 'home') {
-                container.innerHTML = `
-                    <div class="panel-header">Project Settings</div>
-                    <div class="panel-content">
-                        <div class="form-group">
-                            <label>Industry</label>
-                            <select id="set-ind" onchange="State.meta.industry=this.value">
-                                <option value="tech">SaaS / Technology</option>
-                                <option value="food">Food & Beverage</option>
-                                <option value="fashion">Fashion & Retail</option>
-                                <option value="agency">Agency / Service</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Brand Name</label>
-                            <input type="text" value="${State.meta.name}" oninput="State.meta.name=this.value; document.getElementById('project-name-display').innerText=this.value">
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea rows="4" oninput="State.meta.desc=this.value">${State.meta.desc}</textarea>
-                        </div>
-                    </div>
-                `;
-                document.getElementById('set-ind').value = State.meta.industry;
-            }
+                render: () => {
+                    const container = document.getElementById('device-frame');
+                    container.innerHTML = ''; // Clear
 
-            // 2. BUILDER (Block Library)
-            if (UI.activeTab === 'builder') {
-                container.innerHTML = `
-                    <div class="panel-header">Add Blocks</div>
-                    <div class="panel-content">
-                        <div class="block-preview" onclick="Builder.addBlock('hero')"><i class="ph ph-image-square"></i> Hero Section</div>
-                        <div class="block-preview" onclick="Builder.addBlock('features')"><i class="ph ph-squares-four"></i> Feature Grid</div>
-                        <div class="block-preview" onclick="Builder.addBlock('text')"><i class="ph ph-text-t"></i> Rich Text</div>
-                        <div class="block-preview" onclick="Builder.addBlock('cta')"><i class="ph ph-megaphone"></i> Call to Action</div>
-                        <div class="block-preview" onclick="Builder.addBlock('gallery')"><i class="ph ph-images"></i> Image Gallery</div>
-                        <div class="block-preview" onclick="Builder.addBlock('footer')"><i class="ph ph-layout"></i> Simple Footer</div>
+                    State.website.forEach((block, index) => {
+                        const section = document.createElement('div');
+                        section.className = 'w-section';
+                        section.id = block.id;
+                        if(Modules.Builder.selectedBlockId === block.id) section.classList.add('selected');
                         
-                        <hr style="border:0; border-top:1px solid var(--border); margin:15px 0;">
-                        <div style="font-size:0.75rem; color:var(--text-sub); margin-bottom:10px; font-weight:600;">Structure</div>
-                        <div id="layer-list"></div>
-                    </div>
-                `;
-                Builder.renderLayerList();
-            }
+                        // Styles
+                        section.style.backgroundColor = block.bg;
+                        section.style.color = block.color;
+                        section.style.padding = block.padding || '40px 20px';
+                        section.style.position = 'relative';
 
-            // 3. BRANDING ENGINE
-            if (UI.activeTab === 'brand') {
-                container.innerHTML = `
-                    <div class="panel-header">Brand Engine</div>
-                    <div class="panel-content">
-                        <button class="btn" style="width:100%" onclick="Branding.generate()">Generate Names</button>
-                        <div id="brand-results" style="margin-top:15px;"></div>
-                    </div>
-                `;
-            }
+                        // Content Logic
+                        let html = '';
+                        if(block.type === 'hero') {
+                            html = `<h1 contenteditable="true" oninput="Modules.Builder.updateContent('${block.id}', 'h1', this.innerText)" style="font-size:3rem; margin-bottom:10px;">${block.content.h1}</h1>
+                                    <p contenteditable="true" oninput="Modules.Builder.updateContent('${block.id}', 'p', this.innerText)" style="font-size:1.2rem; opacity:0.8;">${block.content.p}</p>`;
+                        }
+                        else if(block.type === 'features') {
+                            html = `<h2 contenteditable="true" style="text-align:center; margin-bottom:40px;">${block.content.h2}</h2>
+                                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
+                                        ${block.content.items.map(i => `<div style="background:white; padding:20px; border-radius:8px; color:#111; box-shadow:0 2px 4px rgba(0,0,0,0.05);">${i}</div>`).join('')}
+                                    </div>`;
+                        }
+                        else if(block.type === 'contact') {
+                            html = `<div style="text-align:center;">
+                                        <h2>${block.content.h2}</h2>
+                                        <p>${block.content.email}</p>
+                                        <button style="background:${State.pmf.brand > 5 ? '#3b82f6' : '#10b981'}; color:white; border:none; padding:10px 20px; border-radius:4px; margin-top:20px;">Send Message</button>
+                                    </div>`;
+                        }
+                        else {
+                            html = `<div contenteditable="true">${block.content.text || block.content.h2}</div>`;
+                        }
 
-            // 4. STRATEGY
-            if (UI.activeTab === 'strategy') {
-                container.innerHTML = `
-                    <div class="panel-header">Market Radar</div>
-                    <div class="panel-content">
-                        <div id="radar-chart-area" style="width:240px; height:240px; margin:0 auto;"></div>
-                        <div style="margin-top:20px;">
-                            <div class="form-group"><label>My Price (1-10)</label><input type="number" id="strat-price" value="5"></div>
-                            <div class="form-group"><label>My Quality (1-10)</label><input type="number" id="strat-qual" value="8"></div>
-                            <div class="form-group"><label>My Brand (1-10)</label><input type="number" id="strat-brand" value="6"></div>
-                            <button class="btn btn-outline" style="width:100%" onclick="Strategy.render()">Update Radar</button>
-                        </div>
-                    </div>
-                `;
-                setTimeout(Strategy.render, 100);
-            }
-        }
-    };
+                        // Edit Actions (Hover)
+                        const actions = document.createElement('div');
+                        actions.className = 'w-actions';
+                        actions.innerHTML = `
+                            <span style="cursor:pointer;" onclick="Modules.Builder.move('${block.id}', -1)">↑</span>
+                            <span style="cursor:pointer;" onclick="Modules.Builder.move('${block.id}', 1)">↓</span>
+                            <span style="cursor:pointer;" onclick="Modules.Builder.deleteBlock('${block.id}')">×</span>
+                        `;
 
-    /* --- WEBSITE BUILDER ENGINE (The Core) --- */
-    const Builder = {
-        selectedId: null, // Block ID
-        selectedEl: null, // specific DOM element (h1, p) inside block
+                        section.innerHTML = html;
+                        section.appendChild(actions);
 
-        render: () => {
-            const board = document.getElementById('artboard');
-            board.innerHTML = '';
-            
-            State.website.forEach((block, index) => {
-                const section = document.createElement('section');
-                section.id = block.id;
-                section.dataset.type = block.type;
-                
-                // Apply Section Styles
-                Object.assign(section.style, block.styles);
-                
-                // Hover Controls (Move Up/Down/Delete)
-                const controls = document.createElement('div');
-                controls.className = 'hover-actions';
-                controls.innerHTML = `
-                    <span style="cursor:pointer" onclick="Builder.moveBlock(${index}, -1)">↑</span>
-                    <span style="cursor:pointer" onclick="Builder.moveBlock(${index}, 1)">↓</span>
-                    <span style="cursor:pointer" onclick="Builder.deleteBlock('${block.id}')">×</span>
-                `;
-                section.appendChild(controls);
+                        // Selection Event
+                        section.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            Modules.Builder.selectBlock(block.id);
+                        });
 
-                // Render Content based on Type
-                let html = '';
-                const s = block.elementStyles || {};
-                
-                // Helper to inject inline styles
-                const st = (key) => Object.entries(s[key]||{}).map(([k,v]) => `${k.replace(/[A-Z]/g, m => "-"+m.toLowerCase())}:${v}`).join(';');
+                        container.appendChild(section);
+                    });
+                },
 
-                if(block.type === 'hero') {
-                    html = `
-                        <h1 contenteditable="true" data-key="h1" style="${st('h1')}">${block.content.h1}</h1>
-                        <p contenteditable="true" data-key="p" style="${st('p')}">${block.content.p}</p>
-                        <button contenteditable="true" data-key="btn" style="${st('btn')}">${block.content.btn}</button>
+                updateContent: (id, key, val) => {
+                    const b = State.website.find(x => x.id === id);
+                    if(b) b.content[key] = val;
+                },
+
+                selectBlock: (id) => {
+                    Modules.Builder.selectedBlockId = id;
+                    Modules.Builder.render(); // Re-render to show border
+                    
+                    const block = State.website.find(b => b.id === id);
+                    const inspector = document.getElementById('inspector');
+                    const content = document.getElementById('inspector-content');
+                    
+                    inspector.classList.add('active');
+                    content.innerHTML = `
+                        <label>Background Color</label>
+                        <input type="color" value="${block.bg}" oninput="Modules.Builder.updateProp('${id}', 'bg', this.value)">
+                        <br><br>
+                        <label>Text Color</label>
+                        <input type="color" value="${block.color}" oninput="Modules.Builder.updateProp('${id}', 'color', this.value)">
+                        <br><br>
+                        <label>Block Type</label>
+                        <div style="color:white; padding:10px; background:#333; border-radius:4px;">${block.type.toUpperCase()}</div>
                     `;
-                } else if(block.type === 'features') {
-                    html = `
-                        <h2 contenteditable="true" data-key="title" style="${st('title')}">${block.content.title}</h2>
-                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; text-align:left;">
-                            ${block.content.items.map(item => `
-                                <div style="background:white; padding:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">
-                                    <h3 contenteditable="true" style="color:#333; margin-bottom:10px;">${item}</h3>
-                                    <p contenteditable="true" style="color:#666; font-size:0.9rem;">Edit this feature description.</p>
-                                </div>
-                            `).join('')}
-                        </div>
-                    `;
-                } else if(block.type === 'text') {
-                    html = `<div contenteditable="true" data-key="text" style="${st('text')}">${block.content.text}</div>`;
-                } else if(block.type === 'cta') {
-                    html = `
-                        <h2 contenteditable="true" data-key="h2" style="${st('h2')}">${block.content.h2}</h2>
-                        <button contenteditable="true" data-key="btn" style="${st('btn')}">${block.content.btn}</button>
-                    `;
-                } else if(block.type === 'gallery') {
-                     html = `
-                        <h2 contenteditable="true" style="text-align:center; margin-bottom:30px;">${block.content.title}</h2>
-                        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;">
-                            <div style="height:150px; background:#eee; display:grid; place-items:center; color:#999;">Image 1</div>
-                            <div style="height:150px; background:#eee; display:grid; place-items:center; color:#999;">Image 2</div>
-                            <div style="height:150px; background:#eee; display:grid; place-items:center; color:#999;">Image 3</div>
-                        </div>
-                     `;
-                } else if(block.type === 'footer') {
-                    html = `<div contenteditable="true" style="text-align:center; opacity:0.7;">&copy; 2026 ${State.meta.name}. All rights reserved.</div>`;
-                }
+                },
 
-                // Append HTML
-                const contentWrapper = document.createElement('div');
-                contentWrapper.innerHTML = html;
-                
-                // Event Delegation for Selection
-                section.addEventListener('click', (e) => {
-                    e.stopPropagation(); // prevent bubbling
-                    Builder.selectBlock(block.id);
-                    // If clicked a child element
-                    if(e.target.dataset.key || e.target.tagName === 'BUTTON' || e.target.tagName.startsWith('H')) {
-                        Builder.selectElement(block.id, e.target);
+                updateProp: (id, prop, val) => {
+                    const b = State.website.find(x => x.id === id);
+                    if(b) b[prop] = val;
+                    Modules.Builder.render();
+                },
+
+                deleteBlock: (id) => {
+                    State.website = State.website.filter(b => b.id !== id);
+                    Modules.Builder.render();
+                    Modules.Builder.renderLayerList();
+                },
+
+                move: (id, dir) => {
+                    const idx = State.website.findIndex(b => b.id === id);
+                    if(dir === -1 && idx > 0) {
+                        [State.website[idx], State.website[idx-1]] = [State.website[idx-1], State.website[idx]];
+                    } else if (dir === 1 && idx < State.website.length - 1) {
+                        [State.website[idx], State.website[idx+1]] = [State.website[idx+1], State.website[idx]];
                     }
-                });
-                
-                // Sync Content Updates (onInput)
-                contentWrapper.addEventListener('input', (e) => {
-                    const key = e.target.dataset.key;
-                    if(key) block.content[key] = e.target.innerText;
-                });
+                    Modules.Builder.render();
+                    Modules.Builder.renderLayerList();
+                },
 
-                section.appendChild(contentWrapper);
-                board.appendChild(section);
-            });
-        },
+                renderLayerList: () => {
+                    const list = document.getElementById('layer-list');
+                    list.innerHTML = State.website.map((b, i) => `
+                        <div style="padding:8px; border:1px solid #333; border-radius:4px; font-size:0.8rem; display:flex; justify-content:space-between; cursor:pointer; background:${Modules.Builder.selectedBlockId === b.id ? '#333' : 'transparent'};" onclick="Modules.Builder.selectBlock('${b.id}')">
+                            <span>${i+1}. ${b.type.toUpperCase()}</span>
+                        </div>
+                    `).join('');
+                },
 
-        addBlock: (type) => {
-            const id = type + '-' + Date.now();
-            let block = { id, type, styles: { padding: '60px 20px' }, content: {}, elementStyles: {} };
-            
-            // Defaults
-            if(type === 'text') {
-                block.content = { text: "Start writing your content here..." };
-                block.elementStyles = { text: { fontSize: '1.1rem', lineHeight: '1.6', maxWidth: '800px', margin: '0 auto' }};
-            }
-            if(type === 'cta') {
-                block.styles = { background: '#111827', color: 'white', textAlign: 'center' };
-                block.content = { h2: "Ready to Start?", btn: "Join Now" };
-                block.elementStyles = { h2: { marginBottom: '20px' }, btn: { background: 'white', color: 'black', padding: '10px 25px', borderRadius: '4px' }};
-            }
-            if(type === 'gallery') {
-                block.content = { title: "Our Work" };
-            }
-            if(type === 'footer') {
-                block.styles = { background: '#1e293b', color: 'white', padding: '30px' };
-            }
+                exportHTML: () => {
+                    const frame = document.getElementById('device-frame').cloneNode(true);
+                    // Cleanup helpers
+                    frame.querySelectorAll('.w-actions').forEach(e => e.remove());
+                    frame.querySelectorAll('*').forEach(e => {
+                        e.contentEditable = "false";
+                        e.style.border = "none";
+                        e.classList.remove('selected', 'w-section');
+                    });
 
-            State.website.push(block);
-            Builder.render();
-            if(UI.activeTab === 'builder') Builder.renderLayerList();
-        },
-
-        deleteBlock: (id) => {
-            State.website = State.website.filter(b => b.id !== id);
-            Builder.render();
-            Builder.renderLayerList();
-        },
-
-        moveBlock: (idx, dir) => {
-            if (dir === -1 && idx > 0) {
-                [State.website[idx], State.website[idx-1]] = [State.website[idx-1], State.website[idx]];
-            } else if (dir === 1 && idx < State.website.length - 1) {
-                [State.website[idx], State.website[idx+1]] = [State.website[idx+1], State.website[idx]];
-            }
-            Builder.render();
-            Builder.renderLayerList();
-        },
-
-        setDevice: (mode) => {
-            const b = document.getElementById('artboard');
-            b.className = 'artboard ' + mode;
-        },
-
-        renderLayerList: () => {
-            const list = document.getElementById('layer-list');
-            if(!list) return;
-            list.innerHTML = State.website.map((b, i) => `
-                <div style="padding:8px; border-bottom:1px solid #334155; font-size:0.8rem; display:flex; justify-content:space-between; cursor:pointer; background:${Builder.selectedId === b.id ? 'rgba(99,102,241,0.2)' : 'transparent'}" onclick="Builder.selectBlock('${b.id}')">
-                    <span>${i+1}. ${b.type.toUpperCase()}</span>
-                </div>
-            `).join('');
-        },
-
-        // --- SELECTION & INSPECTOR ---
-        selectBlock: (id) => {
-            Builder.selectedId = id;
-            Builder.selectedEl = null; // reset specific element selection
-            
-            // Highlight in Canvas
-            document.querySelectorAll('.artboard section').forEach(s => s.classList.remove('selected'));
-            document.getElementById(id).classList.add('selected');
-            
-            // Show Section Settings in Inspector
-            const block = State.website.find(b => b.id === id);
-            const panel = document.getElementById('inspector-content');
-            
-            panel.innerHTML = `
-                <div class="form-group">
-                    <label>Background Color</label>
-                    <input type="color" value="${block.styles.background || '#ffffff'}" oninput="Builder.updateStyle('${id}', 'section', 'background', this.value)">
-                </div>
-                <div class="form-group">
-                    <label>Text Color</label>
-                    <input type="color" value="${block.styles.color || '#000000'}" oninput="Builder.updateStyle('${id}', 'section', 'color', this.value)">
-                </div>
-                <div class="form-group">
-                    <label>Padding (Vertical)</label>
-                    <input type="text" value="${block.styles.padding?.split(' ')[0] || '60px'}" onchange="Builder.updateStyle('${id}', 'section', 'padding', this.value + ' 20px')">
-                </div>
-                <div class="form-group">
-                    <label>Text Align</label>
-                    <select onchange="Builder.updateStyle('${id}', 'section', 'textAlign', this.value)">
-                        <option value="left">Left</option>
-                        <option value="center" ${block.styles.textAlign === 'center' ? 'selected' : ''}>Center</option>
-                        <option value="right">Right</option>
-                    </select>
-                </div>
-            `;
-            
-            if(UI.activeTab === 'builder') Builder.renderLayerList();
-        },
-
-        selectElement: (blockId, domEl) => {
-            Builder.selectedEl = domEl;
-            const key = domEl.dataset.key; // e.g., 'h1', 'btn'
-            if(!key) return;
-
-            const block = State.website.find(b => b.id === blockId);
-            const styles = block.elementStyles[key] || {};
-
-            const panel = document.getElementById('inspector-content');
-            
-            // Render specific element controls
-            panel.innerHTML = `
-                <div style="background:var(--app-bg); padding:10px; margin-bottom:15px; border-radius:4px; border:1px solid var(--primary);">
-                    Editing: <strong>${domEl.tagName}</strong> inside ${block.type}
-                </div>
-                <div class="form-group">
-                    <label>Font Size</label>
-                    <input type="text" value="${styles.fontSize || ''}" onchange="Builder.updateStyle('${blockId}', '${key}', 'fontSize', this.value)">
-                </div>
-                <div class="form-group">
-                    <label>Color</label>
-                    <input type="color" value="${styles.color || '#000000'}" oninput="Builder.updateStyle('${blockId}', '${key}', 'color', this.value)">
-                </div>
-                <div class="form-group">
-                    <label>Margin Bottom</label>
-                    <input type="text" value="${styles.marginBottom || '0px'}" onchange="Builder.updateStyle('${blockId}', '${key}', 'marginBottom', this.value)">
-                </div>
-                ${ key === 'btn' ? `
-                <div class="form-group">
-                    <label>Background</label>
-                    <input type="color" value="${styles.background || '#6366f1'}" oninput="Builder.updateStyle('${blockId}', '${key}', 'background', this.value)">
-                </div>
-                <div class="form-group">
-                    <label>Border Radius</label>
-                    <input type="text" value="${styles.borderRadius || '4px'}" onchange="Builder.updateStyle('${blockId}', '${key}', 'borderRadius', this.value)">
-                </div>` : ''}
-            `;
-        },
-
-        updateStyle: (blockId, elementKey, cssProp, value) => {
-            const block = State.website.find(b => b.id === blockId);
-            if(elementKey === 'section') {
-                block.styles[cssProp] = value;
-                document.getElementById(blockId).style[cssProp] = value;
-            } else {
-                if(!block.elementStyles[elementKey]) block.elementStyles[elementKey] = {};
-                block.elementStyles[elementKey][cssProp] = value;
-                // find the dom element and update
-                const el = document.querySelector(`#${blockId} [data-key="${elementKey}"]`);
-                if(el) el.style[cssProp] = value;
-            }
-        },
-
-        exportHTML: () => {
-            let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${State.meta.name}</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"><style>body{margin:0;font-family:'Inter',sans-serif;color:#333} *{box-sizing:border-box} section{position:relative;}</style></head><body>`;
-            
-            // Use the current DOM state, but strip contenteditable and utility classes
-            const clone = document.getElementById('artboard').cloneNode(true);
-            clone.querySelectorAll('.hover-actions').forEach(e => e.remove());
-            clone.querySelectorAll('*').forEach(e => {
-                e.removeAttribute('contenteditable');
-                e.removeAttribute('data-key');
-                e.classList.remove('selected');
-                e.style.border = 'none'; // remove selection borders
-            });
-
-            html += clone.innerHTML;
-            html += `</body></html>`;
-
-            const blob = new Blob([html], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = State.meta.name.replace(/\s/g, '-') + '.html';
-            a.click();
-        }
-    };
-
-    /* --- BRANDING ENGINE (Linguistic) --- */
-    const Branding = {
-        roots: {
-            tech: ['Sys', 'Net', 'Nov', 'Vel', 'Aero', 'Lumi', 'Quant', 'Syn', 'Dat', 'Virt'],
-            nature: ['Flor', 'Terr', 'Viv', 'Sol', 'Aer', 'Mar', 'Luc', 'Bio', 'Eco'],
-            power: ['Rex', 'Max', 'Fort', 'Dyn', 'Opt', 'Prim', 'Ult', 'Mag']
-        },
-        suffixes: ['ify', 'os', 'ix', 'ex', 'io', 'on', 'ra', 'gen', 'flow'],
-        
-        generate: () => {
-            const container = document.getElementById('brand-results');
-            container.innerHTML = '';
-            
-            const ind = State.meta.industry;
-            const category = (ind === 'tech' || ind === 'agency') ? 'tech' : (ind === 'food' ? 'nature' : 'power');
-            const roots = Branding.roots[category] || Branding.roots.tech;
-            
-            let names = [];
-            
-            // 1. Root + Suffix
-            for(let i=0; i<6; i++) {
-                const r = roots[Math.floor(Math.random()*roots.length)];
-                const s = Branding.suffixes[Math.floor(Math.random()*Branding.suffixes.length)];
-                names.push(r + s);
-            }
-            
-            // 2. Compound
-            names.push(State.meta.name + 'Box');
-            names.push('Go' + State.meta.name);
-            
-            names.forEach(n => {
-                const div = document.createElement('div');
-                div.className = 'name-card';
-                div.innerHTML = `<strong>${n}</strong> <span style="font-size:0.75rem; color:#aaa;">${n.toLowerCase()}.com</span>`;
-                div.onclick = () => {
-                    State.meta.name = n;
-                    document.getElementById('project-name-display').innerText = n;
-                    alert('Brand Name Updated!');
-                };
-                container.appendChild(div);
-            });
-        }
-    };
-
-    /* --- STRATEGY ENGINE (Radar Chart) --- */
-    const Strategy = {
-        render: () => {
-            const price = parseInt(document.getElementById('strat-price')?.value || 5);
-            const qual = parseInt(document.getElementById('strat-qual')?.value || 8);
-            const brand = parseInt(document.getElementById('strat-brand')?.value || 6);
-
-            // Simple SVG Triangle Drawing
-            const max = 10;
-            // Coordinates: Top (Quality), Right (Price), Left (Brand)
-            // Center is 100,100. Radius 100.
-            
-            const pY = 100 - (qual/max)*90; // Top
-            const pX = 100;
-            
-            // Bottom Right (Price) approx 30 deg
-            const brX = 100 + (price/max)*80;
-            const brY = 100 + (price/max)*50;
-            
-            // Bottom Left (Brand)
-            const blX = 100 - (brand/max)*80;
-            const blY = 100 + (brand/max)*50;
-
-            const svg = `
-                <svg width="240" height="240" viewBox="0 0 200 200" style="background:#111; border-radius:50%;">
-                    <circle cx="100" cy="100" r="90" fill="none" stroke="#333"/>
-                    <circle cx="100" cy="100" r="60" fill="none" stroke="#333"/>
-                    <circle cx="100" cy="100" r="30" fill="none" stroke="#333"/>
-                    <line x1="100" y1="10" x2="100" y2="190" stroke="#333"/>
-                    <line x1="20" y1="150" x2="180" y2="50" stroke="#333" style="display:none"/> 
+                    const html = `
+<!DOCTYPE html>
+<html>
+<head>
+<title>${State.brand} - Official Site</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0;font-family:sans-serif;} *{box-sizing:border-box}</style>
+</head>
+<body>
+${frame.innerHTML}
+</body>
+</html>`;
                     
-                    <polygon points="${pX},${pY} ${brX},${brY} ${blX},${blY}" fill="rgba(99, 102, 241, 0.5)" stroke="#6366f1" stroke-width="2"/>
-                    
-                    <text x="100" y="20" fill="white" font-size="10" text-anchor="middle">Quality</text>
-                    <text x="170" y="150" fill="white" font-size="10" text-anchor="middle">Price</text>
-                    <text x="30" y="150" fill="white" font-size="10" text-anchor="middle">Brand</text>
-                </svg>
-            `;
-            
-            const area = document.getElementById('radar-chart-area');
-            if(area) area.innerHTML = svg;
-        }
-    };
+                    const blob = new Blob([html], { type: 'text/html' });
+                    const a = document.createElement('a');
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `${State.brand}-site.html`;
+                    a.click();
+                }
+            }
+        };
 
-    const Project = {
-        save: () => {
-            localStorage.setItem('brandForgePro', JSON.stringify(State));
-            alert('Project Saved Locally!');
-        }
-    };
+        // Initialize App
+        window.onload = App.init;
 
-    // Boot
-    window.onload = UI.init;
-
-</script>
+    </script>
 </body>
 </html>
