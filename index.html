@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BrandZen | Strategic Intelligence</title>
+    <title>BrandZen | Strategic Business Architect</title>
     
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
+            /* Zen Dark Palette */
             --bg: #09090b;
             --surface: #171717;
             --surface-hover: #262626;
@@ -31,13 +32,13 @@
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-main); height: 100vh; display: flex; overflow: hidden; font-size: 14px; letter-spacing: -0.01em; }
 
-        /* --- LAYOUT --- */
+        /* --- DESKTOP LAYOUT --- */
         aside { 
             width: var(--nav-w); background: var(--bg); border-right: 1px solid var(--border); 
             display: flex; flex-direction: column; z-index: 50; flex-shrink: 0; 
         }
 
-        /* Elements Hidden on Desktop */
+        /* Hide Mobile Elements on Desktop */
         .mobile-header, .nav-mobile, .mobile-credit { display: none !important; }
 
         main { flex: 1; position: relative; overflow: hidden; display: flex; flex-direction: column; }
@@ -107,11 +108,12 @@
 
         /* --- MODULE: STRATEGY CANVAS --- */
         .canvas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-        .canvas-cell { background: var(--surface); padding: 20px; min-height: 180px; display: flex; flex-direction: column; }
+        .canvas-cell { background: var(--surface); padding: 20px; min-height: 160px; display: flex; flex-direction: column; }
         .canvas-title { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px; display: block; letter-spacing: 0.05em; }
         .canvas-content { font-size: 13px; line-height: 1.6; color: var(--text); }
         .canvas-content ul { padding-left: 16px; margin: 0; }
         .canvas-content li { margin-bottom: 8px; }
+        .canvas-content strong { color: var(--primary); font-weight: 600; }
 
         /* --- ANIMATIONS --- */
         .view { display: none; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -200,7 +202,7 @@
             <div id="view-profile" class="view active">
                 <span class="mono">01 / Foundation</span>
                 <h1>Define the Essence</h1>
-                <p class="desc">Input your core business DNA. The AI detects context tags (e.g., 'Health' + 'Speed') to tailor all outputs.</p>
+                <p class="desc">Input your core business DNA. The AI detects context (e.g., 'Health' + 'Food') to tailor all outputs.</p>
                 
                 <div class="card">
                     <div class="grid-2">
@@ -222,7 +224,7 @@
                     <br>
                     <div class="grid-2">
                          <div>
-                            <label>Description</label>
+                            <label>Deep Description</label>
                             <textarea id="inp-desc" rows="3" placeholder="e.g. Healthy instant millet brownies..."></textarea>
                         </div>
                         <div>
@@ -241,15 +243,15 @@
 
             <div id="view-names" class="view">
                 <span class="mono">02 / Identity</span>
-                <h1>Fusion Naming Engine</h1>
-                <p class="desc">Smart Fusion (Portmanteau) creates unique brands by fusing syllables.</p>
+                <h1>Semantic Naming Engine</h1>
+                <p class="desc">Advanced Neologisms & Metaphorical Pairs. Logic tuned for meaningful results.</p>
                 
                 <div class="grid-2">
                     <div class="card">
                         <label>Topology</label>
                         <select id="inp-nametype">
-                            <option value="smart">Smart Fusion (Blended)</option>
-                            <option value="two">Premium Two-Word</option>
+                            <option value="smart">Smart Blend (Short & Unique)</option>
+                            <option value="two">Premium Two-Word (Metaphorical)</option>
                             <option value="tech">Abstract (Neologisms)</option>
                         </select>
                         <br><br>
@@ -269,7 +271,7 @@
             <div id="view-canvas" class="view">
                 <span class="mono">03 / Blueprint</span>
                 <h1>Deep Strategy Canvas</h1>
-                <p class="desc">Generates actionable, multi-point strategies based on your industry and audience.</p>
+                <p class="desc">A multi-point consultant report generated from your specific keywords and industry tags.</p>
                 
                 <button class="btn" id="btn-gen-canvas" onclick="Modules.Canvas.generate()" style="margin-bottom:20px;">Generate Deep Analysis</button>
 
@@ -296,7 +298,7 @@
             <div id="view-analysis" class="view">
                 <span class="mono">04 / Intelligence</span>
                 <h1>Market Gap Matrix</h1>
-                <p class="desc">Enter a competitor (e.g. Domino's, Nike) for specific insights.</p>
+                <p class="desc">Enter a competitor (e.g. Domino's, Nike) for specific database insights.</p>
 
                 <div class="card">
                     <div class="grid-2" style="align-items:end;">
@@ -369,7 +371,7 @@
         /* --- MODULES --- */
         const Modules = {
             
-            // 1. ADVANCED NAMING ENGINE
+            // 1. NAMING ENGINE (Gold Master)
             Naming: {
                 generate: () => {
                     const ind = State.industry;
@@ -379,55 +381,69 @@
                     const grid = document.getElementById('name-grid');
                     grid.innerHTML = '';
                     
-                    const desc = State.desc.toLowerCase();
-                    const isHealthy = desc.includes('health') || desc.includes('diet');
-                    
                     // --- DICTIONARIES ---
-                    const smartSuffixes = {
-                        food: ['est', 'vor', 'ous', 'en', 'ia', 'os'], // Harvest -> est, Savor -> vor
-                        tech: ['sys', 'iq', 'os', 'on', 'ex'],
-                        health: ['al', 'pure', 'gen', 'io']
-                    };
-                    const smartPrefixes = {
-                        food: ['Nutri', 'Vita', 'Gus', 'Bon', 'Culi'],
-                        tech: ['Syn', 'Dat', 'Net', 'Nov', 'Vel'],
-                        health: ['Viv', 'Cur', 'San', 'Zen']
+                    const roots = {
+                        food: ['Gusto', 'Savor', 'Bite', 'Chef', 'Crave', 'Dish', 'Pantry', 'Root', 'Leaf'],
+                        tech: ['Sync', 'Node', 'Data', 'Flow', 'Grid', 'Soft', 'Logic', 'Hyper', 'Link'],
+                        fashion: ['Vogue', 'Moda', 'Silk', 'Wear', 'Aura', 'Luxe', 'Style', 'Drape'],
+                        health: ['Vita', 'Pure', 'Zen', 'Bio', 'Lean', 'Pulse', 'Heal', 'Life']
                     };
                     
-                    const adjs = {
-                        food: ['Urban', 'Golden', 'Daily', 'True', 'Wild', 'Honest', 'Prime'],
-                        tech: ['Iron', 'Hyper', 'Neon', 'Meta', 'Prime', 'Smart', 'Next'],
-                        fashion: ['Velvet', 'Noir', 'Iconic', 'Bold', 'Rare'],
-                        health: ['Vital', 'Inner', 'Calm', 'Clean']
+                    // Synonyms for dynamic Two-Word logic
+                    const synonyms = {
+                        'Brownie': ['Crumb', 'Treat', 'Bite', 'Cake', 'Cocoa', 'Fudge'],
+                        'Code': ['Logic', 'Syntax', 'Script', 'Byte', 'Stack', 'Base'],
+                        'Silk': ['Thread', 'Fiber', 'Weave', 'Loom', 'Cloth'],
+                        'Spice': ['Heat', 'Grain', 'Dust', 'Mix', 'Blend']
+                    };
+                    
+                    // Adjectives
+                    const adjectives = {
+                        food: ['Urban', 'Golden', 'Daily', 'True', 'Wild', 'Honest', 'Prime', 'Secret'],
+                        tech: ['Iron', 'Hyper', 'Neon', 'Meta', 'Prime', 'Smart', 'Next', 'Blue'],
+                        fashion: ['Velvet', 'Noir', 'Iconic', 'Bold', 'Rare', 'Chic', 'Modern'],
+                        health: ['Vital', 'Inner', 'Calm', 'Clean', 'Whole', 'Active']
                     };
 
+                    // Abstract Parts
                     const sylls = {
                         start: ['Vel', 'Nov', 'Syn', 'Aero', 'Lumi', 'Omni', 'Zen', 'Arc', 'Kuno'],
                         mid: ['or', 'ia', 'ex', 'os', 'is', 'a'],
                         end: ['ra', 'on', 'ix', 'us', 'io', 'fy']
                     };
 
+                    const rootsList = roots[ind] || roots.tech;
+                    const adjsList = adjectives[ind] || adjectives.tech;
+                    const synList = synonyms[key] || [key, 'Core', 'Base']; // Fallback synonyms
+                    
                     const seen = new Set();
                     let names = [];
                     let attempts = 0;
 
-                    // --- TRUE BLENDING LOGIC ---
-                    const fuse = (prefix, word) => prefix + word.toLowerCase();
-                    const blend = (word, suffix) => {
-                        // Cut word at 3 chars
-                        return word.substring(0, 3) + suffix;
+                    // --- HELPER: ADVANCED SPLICING ---
+                    // Splice word A and B by syllables
+                    const spliceWord = (w1, w2) => {
+                        const cut1 = Math.ceil(w1.length / 2);
+                        const cut2 = Math.floor(w2.length / 2);
+                        return w1.substring(0, cut1) + w2.substring(cut2).toLowerCase();
                     };
 
-                    while(names.length < 9 && attempts < 50) {
+                    while(names.length < 9 && attempts < 100) {
                         attempts++;
                         let n = "";
+                        const r = rootsList[Math.floor(Math.random()*rootsList.length)];
                         
                         if(type === 'two') {
-                            // Premium Two Words
-                            const list = adjs[ind] || adjs.tech;
-                            const adj = list[Math.floor(Math.random()*list.length)];
-                            if(Math.random() > 0.5) n = `${adj} ${key}`;
-                            else n = `${key} ${adj}`; // Rare but possible
+                            // PREMIUM TWO WORD LOGIC (Fixed)
+                            // Rotate between: Adj + Key, Adj + Synonym, Metaphor + Synonym
+                            const mode = Math.floor(Math.random() * 3);
+                            const adj = adjsList[Math.floor(Math.random()*adjsList.length)];
+                            const syn = synList[Math.floor(Math.random()*synList.length)];
+                            const meta = rootsList[Math.floor(Math.random()*rootsList.length)]; // Metaphor from roots
+
+                            if (mode === 0) n = `${adj} ${key}`; // "Golden Brownie"
+                            else if (mode === 1) n = `${adj} ${syn}`; // "Golden Crumb" (Synonym replacement)
+                            else n = `${syn} ${meta}`; // "Crumb Savor" (Metaphor match)
                         } 
                         else if (type === 'tech') {
                             // Abstract
@@ -437,43 +453,26 @@
                             n = s + m + e;
                         }
                         else {
-                            // SMART FUSION (Fixes "Just adding two words")
-                            const preList = smartPrefixes[ind] || smartPrefixes.tech;
-                            const sufList = smartSuffixes[ind] || smartSuffixes.tech;
+                            // SMART BLEND (Portmanteau)
+                            // Mix Key+Root, Root+Key, Syn+Root
+                            const mode = Math.floor(Math.random() * 4);
+                            const syn = synList[Math.floor(Math.random()*synList.length)];
                             
-                            const p = preList[Math.floor(Math.random()*preList.length)];
-                            const s = sufList[Math.floor(Math.random()*sufList.length)];
-                            
-                            const mode = Math.floor(Math.random() * 3);
-                            
-                            if (mode === 0) {
-                                // Prefix + Keyword (Fusion) -> Vita + Brownie = Vitabrownie (No, truncate!)
-                                // Better: Vita + Brown = Vitabrown
-                                let truncKey = key.length > 4 ? key.substring(0,4) : key;
-                                n = p + truncKey.toLowerCase();
-                            } 
-                            else if (mode === 1) {
-                                // Keyword + Suffix -> Brownie + est = Brownest
-                                let truncKey = key.length > 4 ? key.substring(0,4) : key;
-                                n = truncKey + s;
-                            } 
-                            else {
-                                // Double Truncation -> Vita + Brownie = Vibrow
-                                let truncP = p.substring(0,2);
-                                let truncK = key.substring(0,3);
-                                n = truncP + truncK.toLowerCase() + (Math.random()>0.5 ? 'ia' : 'ex');
-                            }
+                            if (mode === 0) n = spliceWord(key, r);      // "Brown" + "av" (Brownav)
+                            else if (mode === 1) n = spliceWord(r, key); // "Sav" + "ownie" (Savownie)
+                            else if (mode === 2) n = spliceWord(syn, r); // "Crumb" + "Savor" -> "Crumvor"
+                            else n = spliceWord(r, syn);                 // "Savor" + "Crumb" -> "Savumb"
                         }
                         
                         // Capitalize & Dedupe
                         n = n.charAt(0).toUpperCase() + n.slice(1);
-                        if(!seen.has(n) && n.length > 3) {
+                        if(!seen.has(n) && n.length > 3 && n.length < 15) {
                             seen.add(n);
                             names.push(n);
                         }
                     }
 
-                    names.forEach(txt => {
+                    names.slice(0,9).forEach(txt => {
                         const el = document.createElement('div');
                         el.className = 'name-chip';
                         el.innerHTML = `
@@ -493,7 +492,7 @@
                 }
             },
 
-            // 2. DEEP STRATEGY ENGINE (Lists)
+            // 2. DEEP STRATEGY ENGINE (HTML Output)
             Canvas: {
                 generate: () => {
                     const btn = document.getElementById('btn-gen-canvas');
@@ -506,49 +505,48 @@
                         const persona = State.persona || "Target Users";
                         
                         // --- TAG DETECTION ---
-                        const tags = [];
-                        if (desc.includes('health') || desc.includes('diet') || desc.includes('organic')) tags.push('HEALTH');
-                        if (desc.includes('fast') || desc.includes('instant') || desc.includes('quick')) tags.push('SPEED');
-                        if (desc.includes('premium') || desc.includes('luxury')) tags.push('LUXURY');
+                        const isHealth = desc.includes('health') || desc.includes('diet') || desc.includes('organic');
+                        const isSpeed = desc.includes('fast') || desc.includes('instant') || desc.includes('quick');
+                        const isPremium = desc.includes('premium') || desc.includes('luxury') || desc.includes('expensive');
                         
                         // --- PROBLEM ---
                         let probHTML = `<ul>
-                            <li><strong>Lack of Specialization:</strong> The market is flooded with generic ${key} options that don't address specific ${persona} needs.</li>
-                            <li><strong>Quality Inconsistency:</strong> Current competitors sacrifice quality for scale.</li>
-                            <li><strong>Trust Deficit:</strong> Users are skeptical of existing claims in the ${State.industry} space.</li>
+                            <li><strong>Choice Paralysis:</strong> ${persona} are overwhelmed by generic ${key} options that lack specific benefits.</li>
+                            <li><strong>The Trust Gap:</strong> Current market leaders sacrifice quality for scale, alienating savvy users.</li>
+                            <li><strong>Inefficiency:</strong> Existing solutions are too slow or complex for modern workflows.</li>
                         </ul>`;
                         
-                        if(tags.includes('HEALTH')) {
+                        if(isHealth) {
                             probHTML = `<ul>
-                                <li><strong>The "Healthy vs Tasty" Dilemma:</strong> Consumers forced to choose between nutrition and flavor.</li>
-                                <li><strong>Label Fatigue:</strong> Hidden ingredients and complex labels confuse buyers.</li>
-                                <li><strong>Accessibility:</strong> Clean, organic ${key} is rarely available in convenient formats.</li>
+                                <li><strong>The Trade-off:</strong> Consumers currently have to choose between taste and health. Most healthy options taste cardboard-like.</li>
+                                <li><strong>Trust Deficit:</strong> "Healthy" labels are often misleading, containing hidden sugars/preservatives.</li>
+                                <li><strong>Accessibility:</strong> Clean, organic ${key} is hard to find in convenient channels.</li>
                             </ul>`;
                         }
 
                         // --- SOLUTION ---
                         let solHTML = `<ul>
-                            <li><strong>Niche Focus:</strong> A ${key} brand built exclusively for ${persona}.</li>
-                            <li><strong>Radical Transparency:</strong> Clear sourcing and production methods to build trust.</li>
-                            <li><strong>Experience-First:</strong> Elevating the unboxing and service layer.</li>
+                            <li><strong>Specialized Formulation:</strong> A dedicated ${key} product designed specifically for the metabolic needs of ${persona}.</li>
+                            <li><strong>Vertical Integration:</strong> Controlling the supply chain to ensure 100% transparency.</li>
+                            <li><strong>Experience-First:</strong> Packaging and unboxing experience that rivals luxury tech.</li>
                         </ul>`;
 
-                        if(tags.includes('SPEED')) {
+                        if(isHealth && isSpeed) {
                             solHTML = `<ul>
-                                <li><strong>Instant Gratification:</strong> ${key} delivered/ready in minutes, not hours.</li>
-                                <li><strong>Frictionless UX:</strong> One-tap reordering and subscription options.</li>
-                                <li><strong>On-Demand Logistics:</strong> Optimized supply chain for rapid fulfillment.</li>
+                                <li><strong>No-Compromise Engineering:</strong> A ${key} that is ready in seconds but retains 100% nutritional value.</li>
+                                <li><strong>Clean Label Promise:</strong> Ingredients so clean a 5-year-old can read them.</li>
+                                <li><strong>Direct-to-Consumer:</strong> Bypassing retail to ensure freshness and lower costs.</li>
                             </ul>`;
                         }
 
                         // --- UVP ---
-                        let uvpText = `The only ${State.industry} brand that combines the speed of tech with the quality of artisan craft for ${persona}.`;
-                        if(tags.includes('LUXURY')) uvpText = `Affordable Luxury: The experience of a high-end brand at an accessible daily price point.`;
+                        let uvpText = `The only ${State.industry} brand that combines speed, quality, and trust for ${persona}.`;
+                        if(isPremium) uvpText = `Affordable Luxury: The experience of a high-end brand at an accessible price point.`;
 
                         document.getElementById('cnv-prob').innerHTML = probHTML;
                         document.getElementById('cnv-sol').innerHTML = solHTML;
                         document.getElementById('cnv-uvp').innerText = uvpText;
-                        document.getElementById('cnv-adv').innerHTML = `<ul><li>Proprietary Data/Recipe</li><li>Exclusive Supply Chain</li><li>Brand Community Moat</li></ul>`;
+                        document.getElementById('cnv-adv').innerHTML = `<ul><li>Proprietary Data/Recipe</li><li>Community Moat</li><li>First-mover Advantage</li></ul>`;
 
                     }, 600);
                 }
